@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aerophone Companion</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header id="top">
+  <div class="brand">Aerophone Companion<small id="ver"></small></div>
+  <nav id="nav">
+    <button data-view="favorites" class="on">Live</button>
+    <button data-view="scenes">Scenes</button>
+    <button data-view="tones">Tones</button>
+    <button data-view="library">Library</button>
+  </nav>
+  <div class="right">
+    <button id="conn" class="conn"><i></i><span>Not connected</span></button>
+    <button id="theme" class="icon" title="Light or dark">
+      <svg viewBox="0 0 20 20"><path d="M10 2a8 8 0 1 0 0 16V2z"/><circle cx="10" cy="10" r="7.25" fill="none" stroke-width="1.5"/></svg>
+    </button>
+  </div>
+</header>
+<main id="main"></main>
+<aside id="inspector"></aside>
+<div id="overlay"></div>
+<div id="toast"></div>
+
+<script src="version.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
