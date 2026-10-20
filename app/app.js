@@ -1,5 +1,5 @@
-// Aerophone Companion: scenes, tones, Live and Library for the Roland AE-20.
-// Talks to an AE-20 / AE-30 over USB with Web MIDI. The instrument's parameter map, value sizes,
+// Aerophone Companion
+// Talks to an AE-20 over USB with Web MIDI. The instrument's parameter map, value sizes,
 // effect lists and names come from data.js, built by tools/docs/build_data.py from Roland's public AE-30/AE-20 documents.
 (() => {
 'use strict';
