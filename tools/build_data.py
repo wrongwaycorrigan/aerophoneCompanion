@@ -235,10 +235,23 @@ for b, (msb, lsb) in banks.items():
             cs[pc - 1] = '' if cat == 'No Assign' else cat
     tones[b], tone_cats[b] = names, cs
 
+# Wave List: the PCM waves in banks A-D, by number (1 = first). Stored in a partial as wave group
+# type INT with these group numbers (the numbers aren't in the document; the instrument uses them).
+WAVE_GROUP = {'A': 8, 'B': 10, 'C': 11, 'D': 36}
+waves, cur = {}, None
+for l in st.splitlines():
+    m = re.match(r'\s*Wave Bank ([A-D])\b', l)
+    if m: cur = m.group(1); waves.setdefault(cur, {}); continue
+    if cur and re.match(r'\s*(Tone List|Scene List|Drum Kit)', l): cur = None
+    if cur:
+        for n, name in re.findall(r'(\d{1,4})\s{2,}(\S.*?)(?=\s{2,}\d{1,4}\s{2,}|\s*$)', l):
+            waves[cur][int(n)] = name.strip()
+wave_lists = {b: [v.get(i, '') for i in range(1, max(v) + 1)] for b, v in sorted(waves.items()) if v}
+
 sizes = build_map.SIZES
 data = {'source': 'Built from Roland\'s public AE-30/AE-20 MIDI Implementation, Parameter Guide and Scene List',
         'toneCats': tone_cats, 'map': amap, 'sizes': sizes, 'fx': fx_lists, 'presets': presets, 'catalog': catalog,
-        'tones': tones, 'vaWaves': va_waves, 'oscTypes': osc_types, 'ccNames': cc_names, 'assignFuncs': ASSIGN_FUNCS}
+        'tones': tones, 'vaWaves': va_waves, 'oscTypes': osc_types, 'ccNames': cc_names, 'assignFuncs': ASSIGN_FUNCS, 'waves': wave_lists, 'waveGroups': WAVE_GROUP}
 open(out, 'w').write('window.AE_DATA = ' + json.dumps(data, separators=(',', ':'), ensure_ascii=False) + ';\n')
 print('wrote', out, len(catalog), 'settings,', sum(len(t) - 1 for t in fx_lists.values()), 'effect types,',
-      sum(1 for v in tones.values() for x in v if x), 'tones')
+      sum(1 for v in tones.values() for x in v if x), 'tones,', sum(len(v) for v in wave_lists.values()), 'waves')

@@ -1,5 +1,5 @@
-// Aerophone Companion
-// Talks to an AE-20 over USB with Web MIDI. The instrument's parameter map, value sizes,
+// Aerophone Companion: scenes, tones, Live and Library for the Roland AE-20.
+// Talks to an AE-20 / AE-30 over USB with Web MIDI. The instrument's parameter map, value sizes,
 // effect lists and names come from data.js, built by tools/docs/build_data.py from Roland's public AE-30/AE-20 documents.
 (() => {
 'use strict';
@@ -23,9 +23,6 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
              set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 
-// Parameters Roland edits through special dialogs, not generic controls
-CAT['Temporary_Tone_PCM%PCMEX_synPtl_N%0'] = { label: 'Oscillator', kind: 'SelectBox', options: D.oscTypes, vofs: 0 };
-CAT['Temporary_Tone_PCM%PCMEX_synPtl_N%1'] = { label: 'Waveform', kind: 'SelectBox', options: D.vaWaves, vofs: 0 };
 
 // ======================= value encoding (Roland sizes) =======================
 function sizeOf(s) {
@@ -479,6 +476,104 @@ async function fetchUserTones(force) {
   } finally { lists.busy = false; state.tonesBusy = false; pumpLists(); }
   if (state.view === 'tones' || state.view === 'scenes') { renderMain(true); renderInspector(); }
 }
+// ---- waves: the PCM waves a partial plays, named from the Wave List (banks A-D) ----
+const WAVE_BANK = Object.fromEntries(Object.entries(D.waveGroups || {}).map(([b, g]) => [g, b]));
+const WAVE_KIND = ['', 'Expansion', 'Sample', 'Multisample'];
+function waveOf(n, P) {
+  const ptl = TP(n, 'ptl_' + P); if (!mem[ptl]) return null;
+  const gt = raw(ptl, 27), gid = raw(ptl, 28), L = raw(ptl, 32), R = raw(ptl, 36);
+  const bank = gt === 0 ? WAVE_BANK[gid] : null;
+  return { gt, gid, L, R, bank, name: bank && L ? ((D.waves || {})[bank] || [])[L - 1] || '' : '' };
+}
+const waveNo = (bank, num) => `${bank} ${String(num).padStart(3, '0')}`;
+function waveLabel(w, short) {
+  if (!w) return '';
+  if (!w.L) return 'No wave';
+  if (w.gt !== 0) return `${WAVE_KIND[w.gt] || 'Wave'} ${w.L}`;
+  if (!w.bank) return `Wave ${w.L} (group ${w.gid})`;
+  return short ? (w.name || waveNo(w.bank, w.L)) : `${waveNo(w.bank, w.L)}${w.name ? ' · ' + w.name : ''}`;
+}
+// stereo waves come as "… L" / "… R" pairs next to each other
+function stereoPartner(bank, num) {
+  const list = (D.waves || {})[bank] || [], nm = list[num - 1] || '', nx = list[num] || '';
+  return / L$/.test(nm) && nx === nm.replace(/ L$/, ' R') ? num + 1 : 0;
+}
+function setWave(n, P, bank, num) {               // plays at once; part of the tone's edits
+  const syn = TP(n, 'synPtl_' + P), ptl = TP(n, 'ptl_' + P);
+  if (raw(syn, 0) !== 0) setVal(syn, 0, 0, null);   // oscillator type: PCM
+  if (raw(ptl, 27) !== 0) setVal(ptl, 27, 0, null);
+  if (raw(ptl, 28) !== D.waveGroups[bank]) setVal(ptl, 28, D.waveGroups[bank], null);
+  setVal(ptl, 32, num, null);
+  setVal(ptl, 36, stereoPartner(bank, num), null);
+}
+function waveBrowser(n, P) {
+  const ptl = TP(n, 'ptl_' + P), syn = TP(n, 'synPtl_' + P); if (!mem[ptl] || !mem[syn]) return;
+  const before = { osc: raw(syn, 0), gt: raw(ptl, 27), gid: raw(ptl, 28), L: raw(ptl, 32), R: raw(ptl, 36) };
+  const w0 = waveOf(n, P);
+  let bank = (w0 && w0.bank) || LS.get('waveBank', 'A'), q = '', cur = w0 && w0.bank ? { bank: w0.bank, num: w0.L } : null;
+  const v = document.createElement('div'); v.className = 'panelveil';
+  v.innerHTML = `<div class="panel wavepanel" role="dialog" aria-modal="true" aria-label="Choose a wave">
+    <h2>Wave for partial ${P}</h2>
+    <div class="wavetop"><div class="wtabs" role="tablist">${Object.keys(D.waves || {}).map((b) => `<button role="tab" data-b="${b}">Bank ${b}</button>`).join('')}</div>
+    <label class="wsearch"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg><input type="search" placeholder="Search all waves" aria-label="Search waves"></label></div>
+    <div class="wlist" role="listbox" tabindex="0"></div>
+    <div class="wfoot"><span class="wnow"></span><button class="stay">Cancel</button><button class="choice primary wdone">Use this wave</button></div></div>`;
+  document.body.appendChild(v);
+  const list = v.querySelector('.wlist'), inp = v.querySelector('input'), now = v.querySelector('.wnow');
+  const rows = () => {
+    const all = []; const ql = q.trim().toLowerCase();
+    for (const [b, names] of Object.entries(D.waves || {})) {
+      if (!ql && b !== bank) continue;
+      names.forEach((nm, i) => { if (nm && (!ql || nm.toLowerCase().includes(ql) || waveNo(b, i + 1).toLowerCase().includes(ql))) all.push([b, i + 1, nm]); });
+    }
+    return all;
+  };
+  const draw = () => {
+    v.querySelectorAll('[data-b]').forEach((t) => { t.classList.toggle('on', !q.trim() && t.dataset.b === bank); t.setAttribute('aria-selected', String(!q.trim() && t.dataset.b === bank)); });
+    const rs = rows();
+    list.innerHTML = rs.length ? rs.map(([b, i, nm]) => `<button role="option" data-w="${b}-${i}" class="${cur && cur.bank === b && cur.num === i ? 'on' : ''}"><small>${waveNo(b, i)}</small>${esc(nm)}${stereoPartner(b, i) ? '<em>stereo</em>' : ''}</button>`).join('') : '<div class="wnone">No waves match</div>';
+    const on = list.querySelector('.on'); if (on) on.scrollIntoView({ block: 'nearest' });
+    now.textContent = cur ? `${waveNo(cur.bank, cur.num)} · ${(D.waves[cur.bank] || [])[cur.num - 1] || ''}` : '';
+  };
+  const pick = (b, i) => { cur = { bank: b, num: i }; setWave(n, P, b, i); draw(); };
+  const close = (keep) => {
+    if (!keep) {                                     // put the partial back as it was
+      if (raw(syn, 0) !== before.osc) setVal(syn, 0, before.osc, null);
+      [[27, 'gt'], [28, 'gid'], [32, 'L'], [36, 'R']].forEach(([o, k]) => { if (raw(ptl, o) !== before[k]) setVal(ptl, o, before[k], null); });
+    }
+    v.remove(); document.removeEventListener('keydown', key, true); renderMain(true); renderInspector();
+  };
+  const key = (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(false); return; }
+    if (e.key === 'Enter' && document.activeElement !== inp) { e.preventDefault(); close(true); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); const rs = rows(); if (!rs.length) return;
+      let i = cur ? rs.findIndex(([b, k]) => b === cur.bank && k === cur.num) : -1;
+      i = Math.max(0, Math.min(rs.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1)));
+      pick(rs[i][0], rs[i][1]);
+    }
+  };
+  document.addEventListener('keydown', key, true);
+  v.querySelectorAll('[data-b]').forEach((t) => { t.onclick = () => { bank = t.dataset.b; LS.set('waveBank', bank); q = ''; inp.value = ''; draw(); }; });
+  inp.oninput = () => { q = inp.value; draw(); };
+  list.onclick = (e) => { const r = e.target.closest('[data-w]'); if (!r) return; const [b, i] = r.dataset.w.split('-'); pick(b, +i); };
+  list.ondblclick = (e) => { if (e.target.closest('[data-w]')) close(true); };
+  v.querySelector('.stay').onclick = () => close(false);
+  v.querySelector('.wdone').onclick = () => close(true);
+  v.onclick = (e) => { if (e.target === v) close(false); };
+  draw(); list.focus();
+}
+// a new tone starts from the instrument's own blank tone, in an empty user tone slot
+async function newTone(n) {
+  if (toneDirty(n)) return toneGuard(n, () => newTone(n));
+  if (!state.userTones) await fetchUserTones();
+  const idx = (state.userTones || []).findIndex(isInitTone);
+  if (idx < 0) { toast('Every user tone slot is in use. Save over one of your own tones instead.'); return; }
+  state.toneTarget[n] = idx; state.toneNameDraft[n] = 'New Tone'; state.partial = 1;
+  setTone(n, 71, 8 + (idx >> 7), idx & 127);
+  state.toneTarget[n] = idx; state.toneNameDraft[n] = 'New Tone';
+  toast(`New tone in U${String(idx + 1).padStart(3, '0')}: choose a wave for each partial, then hold save to keep it.`);
+}
 const toneBlocks = (n) => TONE_BLOCKS.map((b) => TP(n, b));
 function toneSnap(n) { const o = {}; for (const p of toneBlocks(n)) if (mem[p]) o[p] = mem[p].slice(); return o; }
 function toneDirty(n) {
@@ -531,6 +626,7 @@ function toneGuard(n, action) {
 function toneBarHTML(n) {
   const dirty = toneDirty(n), idx = toneTargetFor(n), over = state.userTones && !isInitTone(state.userTones[idx]) && userToneIdx(n) !== idx;
   return `<div class="tonebar ${dirty ? 'edited' : ''}">
+    <button class="tnew" id="tnew" title="Start a new tone in an empty user tone slot">${ICON.plus}New tone</button>
     <span class="tstate">${dirty ? `${ICON.draft}Tone edited` : userToneIdx(n) >= 0 ? 'Your tone' : 'Preset tone'}</span>
     <input id="tname" maxlength="${TONE_NAME_LEN}" value="${esc(state.toneNameDraft[n] ?? currentToneName(n))}" title="Tone name" aria-label="Tone name">
     <select class="slot" id="tslot" title="User tone slot on the AE-20">${userToneOptions(idx)}</select>
@@ -540,6 +636,7 @@ function toneBarHTML(n) {
 function bindToneBar(n) {
   const sel = $('#tslot'), nm = $('#tname'); if (!sel) return;
   if (!state.userTones) fetchUserTones();
+  $('#tnew').onclick = () => newTone(n);
   sel.onchange = () => { state.toneTarget[n] = +sel.value; renderMain(true); };
   nm.onkeydown = (e) => { if (e.key === 'Enter') nm.blur(); e.stopPropagation(); };
   nm.oninput = () => { state.toneNameDraft[n] = nm.value; };
@@ -750,6 +847,7 @@ const PIN = '<svg viewBox="0 0 16 16"><path d="M9.5 1.5l5 5-2 .8-2.6 2.6.3 3.1-1
 // ---- pins: which three values show on a node ----
 const PIN_DEFAULTS = {
   part: ['Temporary_Scene%Perf_part_N%5', 'Temporary_Scene%Perf_part_N%24', 'Temporary_Scene%Perf_part_N%7'],
+  pcm: ['Temporary_Tone_PCM%PCMEX_ptl_N%0', 'Temporary_Tone_PCM%PCMEX_ptl_N%1', 'Temporary_Tone_PCM%PCMEX_ptl_N%2'],   // a PCM wave: level and tuning
   osc: ['Temporary_Tone_PCM%PCMEX_synPtl_N%1', 'Temporary_Tone_PCM%PCMEX_synPtl_N%6', 'Temporary_Tone_PCM%PCMEX_synPtl_N%7'],
   filter: ['Temporary_Tone_PCM%PCMEX_ptl_N%50', 'Temporary_Tone_PCM%PCMEX_ptl_N%61', 'Temporary_Tone_PCM%PCMEX_ptlFenv_N%0'],
   amp: ['Temporary_Tone_PCM%PCMEX_ptlAenv_N%4', 'Temporary_Tone_PCM%PCMEX_ptlAenv_N%16', 'Temporary_Tone_PCM%PCMEX_ptlAenv_N%28'],
@@ -1152,7 +1250,8 @@ function renderTones(soft) {
   const pmt = TP(n, 'pmt');
   const partialOn = (i) => raw(pmt, 2 + 9 * (i - 1));
   const toneBar = toneBarHTML(n);
-  const partials = `<div class="parts" style="top:150px">${[1, 2, 3, 4].map((i) => `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${partialOn(i) ? '' : 'off'}">${partialOn(i) ? '' : '+ '}Partial ${i}</button>`).join('')}</div>`;
+  const plName = (i) => { const sy = TP(n, 'synPtl_' + i), t = raw(sy, 0); return t === 0 ? waveLabel(waveOf(n, i), true) : t === 1 ? `${D.vaWaves[raw(sy, 1)] || 'VA'} wave` : D.oscTypes[t] || ''; };
+  const partials = `<div class="parts" style="top:150px">${[1, 2, 3, 4].map((i) => `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${partialOn(i) ? '' : 'off'}" title="${partialOn(i) ? esc(plName(i)) : 'Turn on partial ' + i}">${partialOn(i) ? `<b>${i}</b>${esc(plName(i))}` : `+ Partial ${i}`}</button>`).join('')}</div>`;
   const defs = {}; let html = '';
   if (!partialOn(P)) {
     defs.partial = { id: 'partial', type: 'partial', title: 'Partial ' + P };
@@ -1160,11 +1259,11 @@ function renderTones(soft) {
     bindNodes(defs); bindParts(); bindToneBar(n); state.defs = defs; return;
   }
   const oscType = raw(syn, 0), wave = raw(syn, 1);
-  const oscName = oscType === 1 ? `${D.vaWaves[wave] || 'VA'} wave` : D.oscTypes[oscType] || 'Oscillator';
+  const oscName = oscType === 1 ? `${D.vaWaves[wave] || 'VA'} wave` : oscType === 0 ? waveLabel(waveOf(n, P)) : D.oscTypes[oscType] || 'Oscillator';
   const uni = raw(sc, 0);
   const Y = 290;
   defs.osc = { id: 'osc', type: 'osc', title: 'Oscillator', ctx };
-  html += nodeHTML('osc', 300, Y, '', 'Oscillator', esc(oscName + (uni ? `, unison ${display(sc, 1)}` : '')), miniRows(pinsFor('osc'), ctx), '<div class="port in air"></div><div class="port out"></div>');
+  html += nodeHTML('osc', 300, Y, '', 'Oscillator', esc(oscName + (uni ? `, unison ${display(sc, 1)}` : '')), miniRows(pinsFor(oscType === 0 ? 'pcm' : 'osc'), ctx), '<div class="port in air"></div><div class="port out"></div>');
   defs.filter = { id: 'filter', type: 'filter', title: 'Filter', ctx };
   html += nodeHTML('filter', 590, Y, '', 'Filter', esc(display(ptl, 49)), miniRows(pinsFor('filter'), ctx), '<div class="port in"></div><div class="port out"></div>');
   defs.amp = { id: 'amp', type: 'amp', title: 'Amp', ctx };
@@ -1348,10 +1447,11 @@ function renderInspector() {
     const { n, tonePart } = { n: s.ctx.n, tonePart: s.ctx.tonePart };
     const syn = TP(tonePart, 'synPtl_' + n), ptl = TP(tonePart, 'ptl_' + n), sc = TP(tonePart, 'synCom');
     h += `<h2>Oscillator</h2><p class="lead">The source of the sound. Partial ${n}.</p>`;
-    h += section('Wave', [0, 1, 6, 7, 8, 22].map((o) => control(syn, o, null, 'osc')));
-    h += section('Pitch', [1, 2].map((o) => control(ptl, o, null, 'osc')));
-    h += section('Unison', [0, 1, 2].map((o) => control(sc, o, null, 'osc')));
-    h += `<details class="more"><summary>All oscillator settings</summary>${allOf(syn, [0, 1, 6, 7, 8, 22], 'osc')}</details>`;
+    const pt = raw(syn, 0) === 0 ? 'pcm' : 'osc', wv = raw(syn, 0) === 0 ? waveLabel(waveOf(tonePart, n)) : '';
+    h += `<section><h4>Wave</h4><button class="wavebtn" id="wavepick" data-n="${tonePart}" data-p="${n}"><span>${raw(syn, 0) === 0 ? esc(wv) : 'Use a PCM wave'}</span><b>Browse waves</b></button>${(pt === 'pcm' ? [0] : [0, 1, 6, 7, 8, 22]).map((o) => control(syn, o, null, pt)).join('')}</section>`;
+    h += section('Pitch', [1, 2].map((o) => control(ptl, o, null, pt)));
+    h += section('Unison', [0, 1, 2].map((o) => control(sc, o, null, pt)));
+    h += `<details class="more"><summary>All oscillator settings</summary>${allOf(syn, [0, 1, 6, 7, 8, 22], pt)}</details>`;
   } else if (s.type === 'filter') {
     const { n, tonePart } = s.ctx; const ptl = TP(tonePart, 'ptl_' + n), syn = TP(tonePart, 'synPtl_' + n), fe = TP(tonePart, 'ptlFenv_' + n);
     h += `<h2>Filter</h2><p class="lead">Tone colour: how bright or dark. Partial ${n}.</p>`;
@@ -1383,6 +1483,7 @@ function renderInspector() {
 }
 function bindInspector() {
   const el = $('#inspector');
+  const wp = $('#wavepick'); if (wp) wp.onclick = () => waveBrowser(+wp.dataset.n, +wp.dataset.p);
   const lightEnv = (k) => { el.querySelectorAll('svg.env .on').forEach((x) => x.classList.remove('on')); if (!k) return; el.querySelectorAll(k[0] === 't' ? `svg.env .es.${k}` : `svg.env .ep.${k}`).forEach((x) => x.classList.add('on')); };
   el.onpointerover = (e) => { const r = e.target.closest('[data-env]'); lightEnv(r && r.dataset.env); };
   el.onfocusin = (e) => { const r = e.target.closest('[data-env]'); lightEnv(r && r.dataset.env); };
@@ -1430,7 +1531,7 @@ function setTone(n, msb, lsb, pc) {
   dev.dt1(block(p).base + 2, [msb, lsb, pc]);
   for (const k of Object.keys(mem)) if (k.startsWith(`Temporary_Tone_PCM_(${n})`)) delete mem[k];
   delete state.toneBase[n]; delete state.toneNameDraft[n];
-  setTimeout(async () => { if (msb === 71) { await readBlock(TP(n, 'common')); await readBlock(TP(n, 'mfx')); } state.sel.title = toneName(msb, lsb, pc); render(); }, 300);
+  setTimeout(async () => { if (msb === 71) { await readBlock(TP(n, 'common')); await readBlock(TP(n, 'mfx')); } if (state.sel) state.sel.title = toneName(msb, lsb, pc); render(); }, 300);
   render();
 }
 
@@ -2407,5 +2508,5 @@ applyTheme();
 if (window.AE_VERSION) $('#ver').textContent = `v${AE_VERSION.version} · ${AE_VERSION.build}`;
 if (!navigator.requestMIDIAccess) { status('', 'No Web MIDI'); $('#main').innerHTML = '<div class="connect"><div class="card"><h2>Use Chrome or Edge</h2><p>This browser can’t talk to MIDI devices. Open the editor in Chrome or Edge.</p></div></div>'; document.body.classList.add('noinsp'); }
 else loadLibs().then(connect);
-window.__app = { saveTone, toneDirty, tonesDirty, fetchUserTones, setTone, setFxType, lists, refreshMode, favorites, air, knobSet, knobDefs, colorState, setMode, catStep, state, mem, block, dev, raw, val, setVal, readBlock, selectScene, switchFavorite, SP, TP, isDirty, toParamSet, audition, LIB };   // for testing
+window.__app = { waveOf, setWave, waveBrowser, newTone, saveTone, toneDirty, tonesDirty, fetchUserTones, setTone, setFxType, lists, refreshMode, favorites, air, knobSet, knobDefs, colorState, setMode, catStep, state, mem, block, dev, raw, val, setVal, readBlock, selectScene, switchFavorite, SP, TP, isDirty, toParamSet, audition, LIB };   // for testing
 })();

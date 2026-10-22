@@ -518,3 +518,34 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .tonebar input{font:500 14px IS;color:var(--ink);background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:170px}
 .tonebar .slot{margin:0;max-width:200px}
 .tonebar .ib{width:40px;height:40px}
+
+/* waves: named partials and the wave browser */
+.parts button b{font-weight:600;color:var(--slate);margin-right:6px}
+.parts button{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wavebtn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:10px 12px;margin:2px 0 10px;border:1px solid var(--line);border-radius:10px;background:var(--mist);text-align:left}
+.wavebtn span{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wavebtn b{flex:none;font-weight:500;font-size:12px;color:var(--brass)}
+.wavebtn:hover{border-color:var(--brass)}
+.wavepanel{width:min(620px,94vw);height:min(640px,88vh);display:flex;flex-direction:column}
+.wavetop{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.wtabs{display:flex;gap:4px}
+.wtabs button{padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:13px}
+.wtabs button.on{border-color:var(--brass);color:var(--brass);font-weight:600}
+.wsearch{flex:1;min-width:160px;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--mist)}
+.wsearch svg{width:15px;height:15px;fill:none;stroke:var(--slate);stroke-width:2;stroke-linecap:round}
+.wsearch input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:none}
+.wlist{flex:1;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));align-content:start;gap:2px}
+.wlist button{display:flex;align-items:baseline;gap:8px;padding:7px 9px;border-radius:8px;text-align:left;font-size:13px;white-space:nowrap;overflow:hidden}
+.wlist button small{color:var(--slate);font-size:11px;flex:none}
+.wlist button em{font-style:normal;font-size:10px;color:var(--air);margin-left:auto}
+.wlist button:hover{background:var(--mist)}
+.wlist button.on{background:var(--brass-soft);color:var(--ink);font-weight:600}
+.wnone{padding:20px;color:var(--slate)}
+.wfoot{display:flex;align-items:center;gap:10px;margin-top:12px}
+.wfoot .wnow{flex:1;color:var(--slate);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wfoot .stay{padding:10px 14px}
+.wfoot .choice{width:auto;margin:0;padding:10px 16px;font-weight:600}
+.tnew{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--slate);padding:4px 8px;border-radius:999px}
+.tnew:hover{color:var(--brass)}
+.tnew svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.wavepanel h2{margin-bottom:14px}

@@ -1,1 +1,1 @@
-window.AE_VERSION = { version: '0.10.0', build: 'ed78cb6', date: '2026-10-20' };
+window.AE_VERSION = { version: '0.11.0', build: 'a59c512', date: '2026-10-22' };

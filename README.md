@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="LICENSE.txt"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-B07D2B"></a>
-  <img alt="Version 0.10.0" src="https://img.shields.io/badge/version-0.10.0-3F877D">
+  <img alt="Version 0.11.0" src="https://img.shields.io/badge/version-0.11.0-3F877D">
   <img alt="For the Roland AE-20" src="https://img.shields.io/badge/for-Roland%20AE--20-222">
   <img alt="Runs in Chrome or Edge" src="https://img.shields.io/badge/runs%20in-Chrome%20%7C%20Edge-4285F4?logo=googlechrome&logoColor=white">
   <img alt="Web MIDI over USB" src="https://img.shields.io/badge/Web%20MIDI-USB%20SysEx-62B5A8">
@@ -56,7 +56,7 @@ It's made for the composing side of things: at the computer, trying sounds again
 </table>
 
 ### Tones
-Go further and explore the tones that create a scene. It's the deepest layer of the AE-20, made easy to explore: oscillators, filters and amps are revealed visually. Save an edited tone to one of the 512 user tone slots and the scene's part plays it.
+Go further and explore the tones that create a scene. It's the deepest layer of the AE-20, made easy to explore: oscillators, filters and amps are revealed visually, and every partial shows the name of the wave it plays. Browse and search all 1,980 built-in waves, or start a **New tone** from scratch. Save an edited tone to one of the 512 user tone slots and the scene's part plays it.
 
 ### Library
 Your AE-20's sound vault. Import, export, organise and back up every scene, then send whole collections to the instrument in one go. Backup only reads from the AE-20, so nothing gets overwritten until you choose.
@@ -84,7 +84,7 @@ You need a Roland AE-20, a USB-C **data** cable, and Chrome or Edge on Windows o
 - **Firefox or Safari:** they can't talk to MIDI devices this way. Use Chrome or Edge.
 - **Instrument unplugged or switched off:** the status light at the top right shows it. Click the light to reconnect.
 - **Where your Library lives:** in the browser at `http://localhost:8642`. Export anything you want to keep as files.
-- **Reporting a problem:** include the version and build code shown next to the app's name (for example `v0.10.0 · 53b2345`).
+- **Reporting a problem:** include the version and build code shown next to the app's name (for example `v0.11.0 · a59c512`).
 
 </details>
 
