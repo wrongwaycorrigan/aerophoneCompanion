@@ -627,7 +627,7 @@ function toneBarHTML(n) {
   const dirty = toneDirty(n), idx = toneTargetFor(n), over = state.userTones && !isInitTone(state.userTones[idx]) && userToneIdx(n) !== idx;
   return `<div class="tonebar ${dirty ? 'edited' : ''}">
     <button class="tnew" id="tnew" title="Start a new tone in an empty user tone slot">${ICON.plus}New tone</button>
-    <span class="tstate">${dirty ? `${ICON.draft}Tone edited` : userToneIdx(n) >= 0 ? 'Your tone' : 'Preset tone'}</span>
+    <span class="tstate">${dirty ? `<span class="drafttxt">${ICON.draft}Draft</span>` : userToneIdx(n) >= 0 ? 'Your tone' : 'Preset tone'}</span>
     <input id="tname" maxlength="${TONE_NAME_LEN}" value="${esc(state.toneNameDraft[n] ?? currentToneName(n))}" title="Tone name" aria-label="Tone name">
     <select class="slot" id="tslot" title="User tone slot on the AE-20">${userToneOptions(idx)}</select>
     <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the AE-20${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}</button>
@@ -1234,6 +1234,8 @@ function fxParams(path, list) {
 }
 
 // ---- tones view: oscillator → filter → amp, LFO and envelope as modulators ----
+// the part, partial and tone bars sit outside the zoomed canvas so they never slide under the title
+function outsideBars(html) { $('#main').insertAdjacentHTML('beforeend', html); }
 function renderTones(soft) {
   const n = state.tonePart, p = SP('part_' + n);
   const partsBar = `<div class="parts">${[1, 2, 3, 4].map((i) => {
@@ -1241,21 +1243,21 @@ function renderTones(soft) {
     const nm = on ? toneName(raw(pp, 2), raw(pp, 3), raw(pp, 4)) : `Part ${i}`;
     return `<button data-tp="${i}" class="${i === n ? 'on' : ''}" ${on ? '' : 'disabled'}>${esc(nm)}</button>`; }).join('')}</div>`;
   if (!mem[p] || !raw(p, 1) || !isZC(n)) {
-    canvasShell(partsBar + `<div class="note" style="position:absolute;left:32px;top:160px">${mem[p] && raw(p, 1) ? 'This part plays a SuperNATURAL or drum tone. Those are shaped by the instrument itself rather than by oscillator and filter settings, so there is nothing to wire here.' : 'Choose a part above.'}</div>`, 1400, 700);
+    canvasShell('', 1400, 700); outsideBars(partsBar + `<div class="note" style="position:absolute;left:32px;top:146px;max-width:520px;z-index:3">${mem[p] && raw(p, 1) ? 'SuperNATURAL and drum tones are finished instruments with no partials to edit.' : 'Choose a part above.'}</div>`);
     bindParts(); return;
   }
-  if (!mem[TP(n, 'synPtl_1')]) { canvasShell(partsBar + '<div class="note" style="position:absolute;left:32px;top:160px">Reading the tone…</div>', 1400, 700); bindParts(); loadTone(n); return; }
+  if (!mem[TP(n, 'synPtl_1')]) { canvasShell('', 1400, 700); outsideBars(partsBar + '<div class="note" style="position:absolute;left:32px;top:146px;max-width:520px;z-index:3">Reading the tone…</div>'); bindParts(); loadTone(n); return; }
   const P = state.partial, ctx = { n: P, tonePart: n };
   const syn = TP(n, 'synPtl_' + P), ptl = TP(n, 'ptl_' + P), lfo = TP(n, 'ptlLfo_' + P), aenv = TP(n, 'ptlAenv_' + P), fenv = TP(n, 'ptlFenv_' + P), sc = TP(n, 'synCom');
   const pmt = TP(n, 'pmt');
   const partialOn = (i) => raw(pmt, 2 + 9 * (i - 1));
   const toneBar = toneBarHTML(n);
   const plName = (i) => { const sy = TP(n, 'synPtl_' + i), t = raw(sy, 0); return t === 0 ? waveLabel(waveOf(n, i), true) : t === 1 ? `${D.vaWaves[raw(sy, 1)] || 'VA'} wave` : D.oscTypes[t] || ''; };
-  const partials = `<div class="parts" style="top:150px">${[1, 2, 3, 4].map((i) => `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${partialOn(i) ? '' : 'off'}" title="${partialOn(i) ? esc(plName(i)) : 'Turn on partial ' + i}">${partialOn(i) ? `<b>${i}</b>${esc(plName(i))}` : `+ Partial ${i}`}</button>`).join('')}</div>`;
+  const partials = `<div class="parts" style="top:138px">${[1, 2, 3, 4].map((i) => `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${partialOn(i) ? '' : 'off'}" title="${partialOn(i) ? esc(plName(i)) : 'Turn on partial ' + i}">${partialOn(i) ? `<b>${i}</b>${esc(plName(i))}` : `+ Partial ${i}`}</button>`).join('')}</div>`;
   const defs = {}; let html = '';
   if (!partialOn(P)) {
     defs.partial = { id: 'partial', type: 'partial', title: 'Partial ' + P };
-    canvasShell(partsBar + toneBar + partials + `<div class="node ghost" data-node="partial" style="left:300px;top:290px"><h3>+ Partial ${P}</h3><div class="sub">Off. Click to turn it on and layer it with the others</div></div>`, 1440, 900);
+    canvasShell(`<div class="node ghost" data-node="partial" style="left:300px;top:290px"><h3>+ Partial ${P}</h3><div class="sub">Off. Click to turn it on and layer it with the others</div></div>`, 1440, 900); outsideBars(partsBar + partials + toneBar);
     bindNodes(defs); bindParts(); bindToneBar(n); state.defs = defs; return;
   }
   const oscType = raw(syn, 0), wave = raw(syn, 1);
@@ -1282,7 +1284,7 @@ function renderTones(soft) {
   if (val(lfo, 25)) links.push(['lfo', 'filter', 'mod']);
   if (val(lfo, 27)) links.push(['lfo', 'amp', 'mod']);
   if (val(fenv, 0)) links.push(['fenv', 'filter', 'mod']);
-  canvasShell(partsBar + toneBar + partials + html, 1440, 900);
+  canvasShell(html, 1440, 900); outsideBars(partsBar + partials + toneBar);
   drawCables(links);
   bindNodes(defs); bindParts(); bindToneBar(n);
   state.defs = defs;
@@ -1389,13 +1391,13 @@ function renderInspector() {
   const el = $('#inspector'); if (!state.connected || state.view === 'favorites' || state.view === 'library') return;
   const s = state.sel;
   if (!s) {
-    el.innerHTML = `<h2>${esc(sceneName())}</h2><p class="lead">${state.view === 'tones' ? 'Select a node to shape the tone. Changes play on the instrument as you make them.' : 'Select a node to see all of its settings. Changes play on the instrument as you make them.'}</p>`;
+    el.innerHTML = `<h2>${esc(sceneName())}</h2><p class="lead">${state.view === 'tones' ? 'Select a node to shape the tone. Changes are heard as you play.' : 'Select a node to see its settings. Changes are heard as you play.'}</p>`;
     return;
   }
   let h = '';
   if (s.type === 'part') {
     const p = SP('part_' + s.n), on = raw(p, 1);
-    h += `<h2>${esc(s.title)}</h2><p class="lead">Part ${s.n}. ${on ? 'Plays when you blow.' : 'Off.'}</p>`;
+    h += `<h2>${esc(s.title)}</h2><p class="lead">Part ${s.n}: one layer of the scene, playing one tone.${on ? '' : ' Off.'}</p>`;
     h += section('', [control(p, 1, null)]);
     if (on) {
       const msb = raw(p, 2), lsb = raw(p, 3), pc = raw(p, 4);
@@ -1412,7 +1414,7 @@ function renderInspector() {
     }
   } else if (s.type === 'fx' || s.type === 'send') {
     const list = s.list, path = s.path, isMfx = list === 'MFX', t = raw(path, isMfx ? 0 : 1);
-    const lead = s.id === 'ifx' ? 'Insert effect. Parts set to the insert effect run through it.' : s.tone ? 'This part uses the tone’s own effect. Turn it off in the part’s settings to replace it with a part effect.' : s.type === 'send' ? 'A shared effect. Each part sends some of its sound here.' : 'Part effect, in place of the tone’s own effect.';
+    const lead = s.id === 'ifx' ? 'Insert effect (IFX): processes only the parts routed into it.' : s.tone ? 'The tone’s own multi-effect (MFX). Switch it off in the part to use a part effect.' : s.type === 'send' ? 'Send effect: shared by all parts; each part sends some of its sound here.' : 'Part multi-effect (MFX): used instead of the tone’s own effect.';
     h += `<h2>${esc(fxName(list, t))}</h2><p class="lead">${lead}</p>`;
     h += `<section><h4>Type</h4><div class="prm"><span class="pin none"></span><select class="sel ctl" id="fxtype" style="grid-column:2/4">${fxOptions(list, t)}</select></div></section>`;
     if (!isMfx) h += section('', [control(path, 0, null, null, 'Effect on'), control(path, 2, null, null, 'Level'), path.endsWith('rev') ? '' : control(path, 3, null, null, 'Reverb send')]);
@@ -1421,7 +1423,7 @@ function renderInspector() {
     if (!LS.get('pins:' + pinType, null)) PIN_DEFAULTS[pinType] = fxParams(path, list).filter((k) => CAT[k].kind === 'Slider').slice(0, 3);
     h += section('Settings', fxParams(path, list).map((k) => control(path, +k.split('%')[2], num, pinType)));
   } else if (s.type === 'assign') {
-    h += `<h2>${esc(s.title)}</h2><p class="lead">What ${s.title.toLowerCase()} controls. Each slot sends to one destination with its own range and curve.</p>`;
+    h += `<h2>${esc(s.title)}</h2><p class="lead">What ${s.title.toLowerCase()} controls: each slot drives one setting, with its own range and curve.</p>`;
     if (s.id === 'breath') {
       const lo = raw(s.blk, 2) || 0, hi = raw(s.blk, 3) ?? 127;
       h += `<section><h4>Your breath</h4><div class="bmeter"><b class="rng" style="left:${lo / 1.27}%;width:${(hi - lo) / 1.27}%"></b><i class="now"></i><i class="pk"></i></div><output class="bmo">${air.seen ? '' : 'Play to see your breath'}</output></section>`;
@@ -1440,13 +1442,13 @@ function renderInspector() {
     if (s.extra) h += section('Pitch bend', s.extra.map(([pth, o]) => control(pth, o, null)));
   } else if (s.type === 'out') {
     const c = SP('common');
-    h += `<h2>Output</h2><p class="lead">The whole scene.</p>`;
+    h += `<h2>Output</h2><p class="lead">The scene’s master output.</p>`;
     h += section('', [0x18, 0x14, 0x15, 0x10].map((o) => control(c, o, null)));
     h += section('Harmony', [0x41, 0x38, 0x39, 0x29, 0x2a, 0x2b, 0x2c].map((o) => control(c, o, null)));
   } else if (s.type === 'osc') {
     const { n, tonePart } = { n: s.ctx.n, tonePart: s.ctx.tonePart };
     const syn = TP(tonePart, 'synPtl_' + n), ptl = TP(tonePart, 'ptl_' + n), sc = TP(tonePart, 'synCom');
-    h += `<h2>Oscillator</h2><p class="lead">The source of the sound. Partial ${n}.</p>`;
+    h += `<h2>Oscillator</h2><p class="lead">Oscillator: the raw sound source. Partial ${n}.</p>`;
     const pt = raw(syn, 0) === 0 ? 'pcm' : 'osc', wv = raw(syn, 0) === 0 ? waveLabel(waveOf(tonePart, n)) : '';
     h += `<section><h4>Wave</h4><button class="wavebtn" id="wavepick" data-n="${tonePart}" data-p="${n}"><span>${raw(syn, 0) === 0 ? esc(wv) : 'Use a PCM wave'}</span><b>Browse waves</b></button>${(pt === 'pcm' ? [0] : [0, 1, 6, 7, 8, 22]).map((o) => control(syn, o, null, pt)).join('')}</section>`;
     h += section('Pitch', [1, 2].map((o) => control(ptl, o, null, pt)));
@@ -1454,28 +1456,28 @@ function renderInspector() {
     h += `<details class="more"><summary>All oscillator settings</summary>${allOf(syn, [0, 1, 6, 7, 8, 22], pt)}</details>`;
   } else if (s.type === 'filter') {
     const { n, tonePart } = s.ctx; const ptl = TP(tonePart, 'ptl_' + n), syn = TP(tonePart, 'synPtl_' + n), fe = TP(tonePart, 'ptlFenv_' + n);
-    h += `<h2>Filter</h2><p class="lead">Tone colour: how bright or dark. Partial ${n}.</p>`;
+    h += `<h2>Filter</h2><p class="lead">Filter: cuts frequencies to shape the tone color; a lower cutoff sounds darker. Partial ${n}.</p>`;
     h += section('Filter', [49, 50, 61, 54].map((o) => control(ptl, o, null, 'filter')).concat([14, 15, 18, 10].map((o) => control(syn, o, null, 'filter'))));
     h += `<section><h4>Envelope</h4>${control(fe, 0, null, 'filter')}${envSVG(fe, 'fenv')}${envControls(fe, 'fenv', 'filter')}</section>`;
   } else if (s.type === 'fenv') {
     const { n, tonePart } = s.ctx; const fe = TP(tonePart, 'ptlFenv_' + n);
-    h += `<h2>Filter envelope</h2><p class="lead">Moves the filter over the life of each note.</p>`;
+    h += `<h2>Filter envelope</h2><p class="lead">Envelope: a shape over each note (attack, decay, sustain, release). This one moves the filter cutoff.</p>`;
     h += section('', [0, 1, 2].map((o) => control(fe, o, null)));
     h += `<section><h4>Shape</h4>${envSVG(fe, 'fenv')}${envControls(fe, 'fenv')}</section>`;
   } else if (s.type === 'amp') {
     const { n, tonePart } = s.ctx; const ae = TP(tonePart, 'ptlAenv_' + n), ptl = TP(tonePart, 'ptl_' + n);
-    h += `<h2>Amp</h2><p class="lead">How each note starts, holds and stops. On a wind instrument your breath also shapes the volume.</p>`;
+    h += `<h2>Amp</h2><p class="lead">Amp: the partial’s volume over each note, set by its envelope. Your breath adds to it as you play.</p>`;
     h += `<section><h4>Envelope</h4>${envSVG(ae, 'amp')}${envControls(ae, 'amp', 'amp')}</section>`;
     h += section('Level', [0, 7, 71, 72].map((o) => control(ptl, o, null, 'amp')));
   } else if (s.type === 'lfo') {
     const { n, tonePart } = s.ctx; const lf = TP(tonePart, 'ptlLfo_' + n), syn = TP(tonePart, 'synPtl_' + n);
-    h += `<h2>LFO 1</h2><p class="lead">Automatic movement, like vibrato. Turn up a depth to wire it to that target.</p>`;
+    h += `<h2>LFO 1</h2><p class="lead">LFO: a slow, repeating wave that moves pitch (vibrato), filter (wah) or volume (tremolo).</p>`;
     h += section('Shape and speed', [0, 1, 2, 4, 11, 22].map((o) => control(lf, o, null, 'lfo')));
     h += section('Targets', [23, 25, 27, 29].map((o) => control(lf, o, null, 'lfo')).concat([control(syn, 7, null, 'lfo')]));
     h += `<details class="more"><summary>LFO 2</summary>${[79, 80, 81, 83, 90, 101, 102, 104, 106, 108].map((o) => control(lf, o, null)).join('')}</details>`;
   } else if (s.type === 'toneout') {
     const { tonePart } = s.ctx; const c = TP(tonePart, 'common');
-    h += `<h2>Tone output</h2><p class="lead">The whole tone: level, mono or poly, portamento.</p>`;
+    h += `<h2>Tone output</h2><p class="lead">The tone’s overall level, mono or poly, and portamento.</p>`;
     h += section('', [21, 22, 26, 29, 30, 32, 36].map((o) => control(c, o, null)));
   }
   el.innerHTML = h;
@@ -1725,8 +1727,8 @@ function renderLibrary() {
         ${state.connected ? `<button class="btn ghost" id="backup" ${state.backup ? 'disabled' : ''}>${ICON.download}Back up</button>` : ''}</header>
       <div class="banks">${banks}</div>
       <div class="slots">${slots}</div>
-      ${state.backup ? `<footer class="bk"><div class="bkbar"><i style="width:${(state.backup.done / Math.max(1, state.backup.total) * 100).toFixed(1)}%"></i></div><span>Backing up ${Math.min(state.backup.total, state.backup.done + 1)} of ${state.backup.total}: ${esc(state.backup.now || '')}</span><button class="clear" id="bkstop">Stop</button></footer>` : `<footer><button class="hold big" id="push" ${n && state.connected ? '' : 'disabled'}><div class="fill"></div>${ICON.upload}<span>${n ? `Hold to update ${n} slot${n === 1 ? '' : 's'}` : state.picks.length > 1 ? `Now pick the first slot for ${state.picks.length} scenes` : state.picks.length ? 'Now pick a slot' : 'Line up a scene on a slot'}</span></button>
-        ${n ? '<button class="clear" id="clearq">Clear</button>' : ''}</footer>`}
+      ${state.backup ? `<footer class="bk"><div class="bkbar"><i style="width:${(state.backup.done / Math.max(1, state.backup.total) * 100).toFixed(1)}%"></i></div><span>Backing up ${Math.min(state.backup.total, state.backup.done + 1)} of ${state.backup.total}: ${esc(state.backup.now || '')}</span><button class="clear" id="bkstop">Stop</button></footer>` : n ? `<footer><button class="hold big" id="push" ${state.connected ? '' : 'disabled'}><div class="fill"></div>${ICON.upload}<span>Hold to update ${n} slot${n === 1 ? '' : 's'}</span></button>
+        <button class="clear" id="clearq">Clear</button></footer>` : ''}
     </section>
     <input type="file" id="libfile" accept=".aezl,application/json" multiple hidden></div>`;
 

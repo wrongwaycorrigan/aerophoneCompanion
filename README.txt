@@ -83,7 +83,7 @@ NOTES
 -----
 
 - The small text next to the name is the version and build code (for example
-  v0.11.0 · a59c512). Mention it when reporting a problem.
+  v0.11.1 · 55edeaa). Mention it when reporting a problem.
 - Your Library is stored in this browser at http://localhost:8642. Export what
   you want to keep as files.
 - The status light top right shows when the AE-20 is unplugged or off; click

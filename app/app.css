@@ -510,11 +510,8 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .brand small{font:500 10.5px IS;color:var(--slate);opacity:.7;margin-left:8px;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 
 /* tones view: save the edited tone into a user tone slot */
-.tonebar{position:absolute;right:32px;top:90px;display:flex;align-items:center;gap:8px;z-index:3;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:5px 6px 5px 16px}
-.tonebar.edited{border-color:var(--brass)}
+.tonebar{position:absolute;right:24px;top:86px;display:flex;align-items:center;gap:8px;z-index:3;background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:5px 6px 5px 16px}
 .tonebar .tstate{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--slate);white-space:nowrap}
-.tonebar.edited .tstate{color:var(--brass);font-weight:600}
-.tonebar .tstate svg{width:14px;height:14px;fill:none;stroke:var(--brass);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tonebar input{font:500 14px IS;color:var(--ink);background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:170px}
 .tonebar .slot{margin:0;max-width:200px}
 .tonebar .ib{width:40px;height:40px}
@@ -534,8 +531,8 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .wsearch{flex:1;min-width:160px;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--mist)}
 .wsearch svg{width:15px;height:15px;fill:none;stroke:var(--slate);stroke-width:2;stroke-linecap:round}
 .wsearch input{flex:1;border:0;background:none;font:inherit;color:var(--ink);outline:none}
-.wlist{flex:1;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));align-content:start;gap:2px}
-.wlist button{display:flex;align-items:baseline;gap:8px;padding:7px 9px;border-radius:8px;text-align:left;font-size:13px;white-space:nowrap;overflow:hidden}
+.wlist{flex:1;min-height:0;overflow:auto;grid-auto-rows:max-content;border:1px solid var(--line);border-radius:12px;padding:4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));align-content:start;gap:2px}
+.wlist button{display:flex;align-items:baseline;gap:8px;min-height:32px;min-width:0;padding:7px 9px;border-radius:8px;text-align:left;font-size:13px;white-space:nowrap;overflow:hidden}
 .wlist button small{color:var(--slate);font-size:11px;flex:none}
 .wlist button em{font-style:normal;font-size:10px;color:var(--air);margin-left:auto}
 .wlist button:hover{background:var(--mist)}

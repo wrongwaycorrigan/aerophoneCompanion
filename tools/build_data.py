@@ -98,6 +98,9 @@ def catalog_entry(e, m):
         c.update(kind='Switch' if [o.lower() for o in opts] == ['off', 'on'] else 'SelectBox', options=opts, vofs=lo, min=0, max=len(opts) - 1)
         return c
     mn, mx = m.get('mn', 0), m['mx']
+    if (lo, hi) == (0, 1) and re.search(r'(Switch|Sw|SW)$', name):     # on/off settings the document lists without choices
+        c.update(kind='Switch', options=['Off', 'On'], vofs=0, min=0, max=1)
+        return c
     c.update(kind='Slider', min=mn, max=mx)
     if e['disp']:
         d = e['disp'][0]
