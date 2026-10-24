@@ -546,3 +546,15 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .tnew:hover{color:var(--brass)}
 .tnew svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .wavepanel h2{margin-bottom:14px}
+
+/* partial tabs: solo and remove */
+.plist button{display:inline-flex;align-items:center;gap:0}
+.plist .pso,.plist .prm-x{display:inline-grid;place-items:center;width:20px;height:20px;margin-left:6px;border-radius:5px;font-size:11px;font-weight:700;color:var(--slate);border:1px solid var(--line);flex:none}
+.plist .prm-x{border-color:transparent;font-size:15px;font-weight:400;margin-left:2px;opacity:0;transition:opacity .15s}
+.plist button:hover .prm-x,.plist button:focus-visible .prm-x{opacity:1}
+.plist .pso:hover{border-color:var(--brass);color:var(--brass)}
+.plist .pso.lit{background:var(--brass);border-color:var(--brass);color:var(--paper)}
+.plist .prm-x:hover{color:var(--ink);background:var(--mist)}
+.plist button.muted{opacity:.55}
+.plist button{max-width:none}
+.plist .pnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}

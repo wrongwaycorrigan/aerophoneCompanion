@@ -69,9 +69,9 @@ TONES
   Go further and explore the tones that create a scene. It's the deepest layer
   of the AE-20, made easy to explore: oscillators, filters and amps are
   revealed visually, and every partial shows the name of the wave it plays.
-  Browse and search all 1,980 built-in waves, or start a New tone from
-  scratch. Save an edited tone to one of the 512 user tone slots and the
-  scene's part plays it.
+  Browse and search all 1,980 built-in waves, add or remove partials, solo one
+  to hear it on its own, or start a New tone from scratch. Save an edited tone
+  to one of the 512 user tone slots and the scene's part plays it.
 
 LIBRARY
   Your AE-20's sound vault. Import, export, organise and back up every scene,
@@ -83,7 +83,7 @@ NOTES
 -----
 
 - The small text next to the name is the version and build code (for example
-  v0.11.1 · 55edeaa). Mention it when reporting a problem.
+  v0.12.0 · 83b7ad6). Mention it when reporting a problem.
 - Your Library is stored in this browser at http://localhost:8642. Export what
   you want to keep as files.
 - The status light top right shows when the AE-20 is unplugged or off; click

@@ -435,7 +435,7 @@ async function loadScene() {
     }
     for (const k of Object.keys(mem)) if (k.startsWith('Temporary_Tone_PCM') && !k.endsWith('common') && !k.endsWith('mfx')) delete mem[k];
     const nm = sceneName(); if (nm) state.scenes.set(sceneKey(state.cur.msb, state.cur.lsb, state.cur.pc), nm);
-    state.base = snapshot(); state.loaded = snapshot(); state.entry = null; state.unstored = false; state.toneBase = {};
+    state.base = snapshot(); state.loaded = snapshot(); state.entry = null; state.unstored = false; state.toneBase = {}; state.solo = null;
   } finally { state.loading = false; }
   render();
 }
@@ -574,11 +574,58 @@ async function newTone(n) {
   state.toneTarget[n] = idx; state.toneNameDraft[n] = 'New Tone';
   toast(`New tone in U${String(idx + 1).padStart(3, '0')}: choose a wave for each partial, then hold save to keep it.`);
 }
+// ---- partials: solo to hear one on its own, add, remove ----
+const PSW = (i) => 2 + 9 * (i - 1);                // a partial's on/off switch, in the tone's mix table
+function partialIsOn(n, i) {                       // as saved in the tone, whatever solo is doing
+  const s = state.solo; if (s && s.part === n) return s.saved[i];
+  return raw(TP(n, 'pmt'), PSW(i));
+}
+function setSwitches(n, want) {                    // straight to the instrument: hearing, not editing
+  const pmt = TP(n, 'pmt'); if (!mem[pmt]) return;
+  for (let j = 1; j <= 4; j++) if (raw(pmt, PSW(j)) !== want[j]) { mem[pmt][PSW(j)] = want[j]; dev.dt1(block(pmt).base + PSW(j), [want[j]]); }
+}
+function unsolo() {
+  const s = state.solo; if (!s) return;
+  state.solo = null; setSwitches(s.part, s.saved);
+}
+function toggleSolo(n, i) {
+  const was = state.solo; unsolo();
+  if (!(was && was.part === n && was.p === i)) {
+    const saved = {}; for (let j = 1; j <= 4; j++) saved[j] = raw(TP(n, 'pmt'), PSW(j));
+    state.solo = { part: n, p: i, saved };
+    setSwitches(n, { 1: +(i === 1), 2: +(i === 2), 3: +(i === 3), 4: +(i === 4) });
+  }
+  renderMain(true);
+}
+const PARTIAL_BLOCKS = ['synPtl', 'ptl', 'ptlFenv', 'ptlAenv', 'ptlLfo'];
+function addPartial(n, i) {                        // a new partial starts from partial 1's shaping, then you pick its wave
+  unsolo();
+  const from = [1, 2, 3, 4].find((j) => j !== i && raw(TP(n, 'pmt'), PSW(j)));
+  if (from) for (const b of PARTIAL_BLOCKS) {
+    const a = TP(n, `${b}_${from}`), t = TP(n, `${b}_${i}`); if (!mem[a] || !mem[t]) continue;
+    mem[t].set(mem[a]); dev.dt1(block(t).base, Array.from(mem[t]));
+  }
+  setVal(TP(n, 'pmt'), PSW(i), 1);
+  state.partial = i; renderMain(); renderInspector();
+  waveBrowser(n, i);
+}
+function removePartial(n, i) {
+  unsolo();
+  const on = [1, 2, 3, 4].filter((j) => raw(TP(n, 'pmt'), PSW(j)));
+  if (on.length <= 1) { toast('A tone needs at least one partial'); return; }
+  const ptl = TP(n, 'ptl_' + i), keep = { L: raw(ptl, 32), R: raw(ptl, 36) };
+  setVal(TP(n, 'pmt'), PSW(i), 0); setVal(ptl, 32, 0); setVal(ptl, 36, 0);   // off, and its wave cleared
+  if (state.partial === i) state.partial = on.find((j) => j !== i);
+  renderMain(); renderInspector();
+  toast(`Partial ${i} removed`, { label: 'Undo', run: () => { setVal(ptl, 32, keep.L); setVal(ptl, 36, keep.R); setVal(TP(n, 'pmt'), PSW(i), 1); state.partial = i; renderMain(); renderInspector(); } });
+}
 const toneBlocks = (n) => TONE_BLOCKS.map((b) => TP(n, b));
 function toneSnap(n) { const o = {}; for (const p of toneBlocks(n)) if (mem[p]) o[p] = mem[p].slice(); return o; }
 function toneDirty(n) {
   const b = state.toneBase[n]; if (!b) return false;
-  return toneBlocks(n).some((p) => mem[p] && b[p] && mem[p].some((v, i) => v !== b[p][i]));
+  const s = state.solo && state.solo.part === n ? state.solo : null, pmt = TP(n, 'pmt');
+  const sw = (p, i, v) => { if (s && p === pmt) for (let j = 1; j <= 4; j++) if (i === PSW(j)) return s.saved[j]; return v; };
+  return toneBlocks(n).some((p) => mem[p] && b[p] && mem[p].some((v, i) => sw(p, i, v) !== b[p][i]));
 }
 const tonesDirty = () => [1, 2, 3, 4].filter(toneDirty);
 const userToneIdx = (n) => { const p = SP('part_' + n); return raw(p, 2) === 71 && raw(p, 3) >= 8 && raw(p, 3) <= 11 ? (raw(p, 3) - 8) * 128 + raw(p, 4) : -1; };
@@ -594,6 +641,7 @@ function userToneOptions(target) {
   return state.userTones.map((t, i) => `<option value="${i}" ${i === target ? 'selected' : ''}>U${String(i + 1).padStart(3, '0')}  ${isInitTone(t) ? '(empty)' : esc(t)}</option>`).join('');
 }
 function saveTone(n, idx, name) {
+  unsolo();
   const c = TP(n, 'common'), p = SP('part_' + n);
   if (!mem[c] || !mem[p]) return;
   name = (name ?? currentToneName(n)).slice(0, TONE_NAME_LEN);
@@ -619,7 +667,7 @@ function toneGuard(n, action) {
   document.body.appendChild(v);
   const close = () => v.remove();
   holdable(v.querySelector('[data-c=tone]'), () => { close(); saveTone(n, idx); action(); });
-  v.querySelector('[data-c=discard]').onclick = () => { close(); state.toneBase[n] = toneSnap(n); action(); };
+  v.querySelector('[data-c=discard]').onclick = () => { close(); unsolo(); state.toneBase[n] = toneSnap(n); action(); };
   v.querySelector('.stay').onclick = close;
   v.onclick = (e) => { if (e.target === v) close(); };
 }
@@ -1048,7 +1096,7 @@ function bindNodes(defs) {
     const cv = e.target.closest('[data-curve]');
     if (cv) { const b = cv.dataset.curve; setVal(b, 7, ((raw(b, 7) || 0) + (e.shiftKey ? 11 : 1)) % 12); }
     if (d.type === 'part' && !raw(SP('part_' + d.n), 1)) { setVal(SP('part_' + d.n), 1, 1); d.title = toneName(raw(SP('part_' + d.n), 2), raw(SP('part_' + d.n), 3), raw(SP('part_' + d.n), 4)); toast(`Part ${d.n} is on`); }
-    if (d.type === 'partial') { setVal(TP(state.tonePart, 'pmt'), 2 + 9 * (state.partial - 1), 1); toast(`Partial ${state.partial} is on`); renderMain(); return; }
+    if (d.type === 'partial') { addPartial(state.tonePart, state.partial); return; }
     state.sel = d; renderMain(true); renderInspector();
   };
   // values inside a node: drag up or down, or use the mouse wheel
@@ -1250,10 +1298,13 @@ function renderTones(soft) {
   const P = state.partial, ctx = { n: P, tonePart: n };
   const syn = TP(n, 'synPtl_' + P), ptl = TP(n, 'ptl_' + P), lfo = TP(n, 'ptlLfo_' + P), aenv = TP(n, 'ptlAenv_' + P), fenv = TP(n, 'ptlFenv_' + P), sc = TP(n, 'synCom');
   const pmt = TP(n, 'pmt');
-  const partialOn = (i) => raw(pmt, 2 + 9 * (i - 1));
+  const partialOn = (i) => partialIsOn(n, i), solo = state.solo && state.solo.part === n ? state.solo.p : 0;
+  const onCount = [1, 2, 3, 4].filter(partialOn).length;
   const toneBar = toneBarHTML(n);
   const plName = (i) => { const sy = TP(n, 'synPtl_' + i), t = raw(sy, 0); return t === 0 ? waveLabel(waveOf(n, i), true) : t === 1 ? `${D.vaWaves[raw(sy, 1)] || 'VA'} wave` : D.oscTypes[t] || ''; };
-  const partials = `<div class="parts" style="top:138px">${[1, 2, 3, 4].map((i) => `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${partialOn(i) ? '' : 'off'}" title="${partialOn(i) ? esc(plName(i)) : 'Turn on partial ' + i}">${partialOn(i) ? `<b>${i}</b>${esc(plName(i))}` : `+ Partial ${i}`}</button>`).join('')}</div>`;
+  const partials = `<div class="parts plist" style="top:138px">${[1, 2, 3, 4].map((i) => partialOn(i)
+    ? `<button data-pl="${i}" class="${i === P ? 'on' : ''} ${solo && solo !== i ? 'muted' : ''}" title="${esc(plName(i))}"><b>${i}</b><span class="pnm">${esc(plName(i))}</span><span class="pso ${solo === i ? 'lit' : ''}" data-solo="1" role="button" aria-pressed="${solo === i}" title="${solo === i ? 'Stop solo' : 'Solo: hear only this partial'}">S</span>${onCount > 1 ? `<span class="prm-x" data-rm="1" role="button" title="Remove partial ${i}">×</span>` : ''}</button>`
+    : `<button data-pl="${i}" class="off" title="Add partial ${i}">+ Partial ${i}</button>`).join('')}</div>`;
   const defs = {}; let html = '';
   if (!partialOn(P)) {
     defs.partial = { id: 'partial', type: 'partial', title: 'Partial ' + P };
@@ -1291,8 +1342,14 @@ function renderTones(soft) {
   if (state.sel && !defs[state.sel.id]) state.sel = null;
 }
 function bindParts() {
-  document.querySelectorAll('[data-tp]').forEach((b) => { b.onclick = () => { state.tonePart = +b.dataset.tp; state.sel = null; renderMain(); renderInspector(); }; });
-  document.querySelectorAll('[data-pl]').forEach((b) => { b.onclick = () => { state.partial = +b.dataset.pl; renderMain(); renderInspector(); }; });
+  document.querySelectorAll('[data-tp]').forEach((b) => { b.onclick = () => { unsolo(); state.tonePart = +b.dataset.tp; state.sel = null; renderMain(); renderInspector(); }; });
+  document.querySelectorAll('[data-pl]').forEach((b) => { b.onclick = (e) => {
+    const n = state.tonePart, i = +b.dataset.pl;
+    if (e.target.closest('[data-solo]')) { e.stopPropagation(); return toggleSolo(n, i); }
+    if (e.target.closest('[data-rm]')) { e.stopPropagation(); return removePartial(n, i); }
+    if (!partialIsOn(n, i)) return addPartial(n, i);
+    state.partial = i; renderMain(); renderInspector();
+  }; });
 }
 
 // ---- breath and bite: what goes in, what comes out ----
@@ -1528,6 +1585,7 @@ function bindInspector() {
   };
 }
 function setTone(n, msb, lsb, pc) {
+  if (state.solo && state.solo.part === n) state.solo = null;   // the instrument reloads the tone
   const p = SP('part_' + n);
   [msb, lsb, pc].forEach((v, i) => { mem[p][2 + i] = v; });
   dev.dt1(block(p).base + 2, [msb, lsb, pc]);
@@ -2458,6 +2516,7 @@ function bindSearch() {
 document.getElementById('nav').onclick = (e) => {
   const b = e.target.closest('button'); if (!b || b.disabled) return;
   if (state.favEdit) favCancel(true);
+  if (b.dataset.view !== 'tones') unsolo();
   state.view = b.dataset.view; state.sel = null; LS.set('view', state.view); render();
 };
 function applyTheme() { if (state.theme) document.documentElement.dataset.theme = state.theme; else delete document.documentElement.dataset.theme; }
