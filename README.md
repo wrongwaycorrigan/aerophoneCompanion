@@ -81,11 +81,11 @@ You need a Roland AE-20, a USB-C **data** cable, and Chrome or Edge on Windows o
 <summary><b>Troubleshooting</b></summary>
 
 - **Windows warns about a downloaded file:** right-click the zip › Properties › tick **Unblock**, then extract again.
-- **macOS won't open the start script:** right-click it › **Open**, then **Open** again. If it still refuses, run `xattr -d com.apple.quarantine` and `chmod +x` on it in Terminal (type each command, then drag the script onto the Terminal window).
 - **Firefox or Safari:** they can't talk to MIDI devices this way. Use Chrome or Edge.
 - **Instrument unplugged or switched off:** the status light at the top right shows it. Click the light to reconnect.
 - **Where your Library lives:** in the browser at `http://localhost:8642`. Export anything you want to keep as files.
 - **Reporting a problem:** include the version and build code shown next to the app's name (for example `v0.14.0 · 5d1212b`).
+- **macOS won't open the start script:** right-click it › **Open**, then **Open** again. If it still refuses, run `xattr -d com.apple.quarantine` and `chmod +x` on it in Terminal (type each command, then drag the script onto the Terminal window).
 
 </details>
 
