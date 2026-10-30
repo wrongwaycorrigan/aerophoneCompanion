@@ -5,54 +5,15 @@
   /_/  |_/_____/_/ |_|\____/_/   /_/ /_/\____/_/ |_/_____/
                                   C  O  M  P  A  N  I  O  N
 
-          A companion app for the Roland Aerophone AE-20
+              Enhanced expression for the Roland AE-20
 ==============================================================================
 
 Aerophone Companion unlocks the potential of the Roland AE-20 Digital Wind
-Instrument with an intuitive, browser-based app.
+Instrument with an intuitive, browser-based app. It talks to your instrument
+over USB using SysEx, the messages the AE-20 already understands.
 
-It talks to your instrument over USB using SysEx, the messages the AE-20
-already understands.
-
-
-FIRST TIME
-----------
-
-1. If your computer doesn't list the AE-20 as a MIDI device, install the
-   Aerophone USB driver (roland.com > Support > Aerophone AE-20 > Updates &
-   Drivers).
-
-2. Connect the AE-20 with a USB-C data cable and turn it on. Close Roland's
-   phone app (or turn Bluetooth off on the AE-20) so the two don't compete.
-
-3. Start Aerophone Companion:
-
-   Windows  Double-click "Start Aerophone Companion (Windows).bat".
-            If Windows warns about a downloaded file: right-click the .zip,
-            choose Properties > Unblock, then extract again.
-
-   Mac      Right-click "Start Aerophone Companion (Mac).command" > Open.
-            Needs python3.
-            If macOS still won't open it, open Terminal and run these two
-            commands, dragging the script onto the window after each:
-              xattr -d com.apple.quarantine 
-              chmod +x 
-
-   A small server window opens, then Aerophone Companion in its own browser
-   window. Keep the server window open while you play; close it when you're
-   done.
-
-4. When the browser asks to "control and reprogram your MIDI devices",
-   click Allow.
-
-
-BACK UP FIRST
--------------
-
-In Library, click "Back up" on the AE-20 side. It reads every user scene and
-your 12 favorites into a dated library on this computer, and changes nothing
-on the instrument. Export it to keep a file. User tones are not included in
-the backup.
+It's made for the composing side of things: at the computer, trying sounds
+against a track and moving quickly from idea to idea.
 
 
 WHAT IT DOES
@@ -76,7 +37,7 @@ TONES
   Browse and search all 1,980 built-in waves, add or remove partials, solo one
   to hear it on its own, or start a New tone from scratch. Save an edited tone
   to one of the 512 user tone slots, or save it to your computer as a ZENOLOGY
-  bank file (the disk icon) to keep shaping it in Roland's ZENOLOGY plug-in.
+  bank file to keep shaping it in Roland's plug-in.
 
 LIBRARY
   Your AE-20's sound vault. Import, export, organise and back up every scene,
@@ -84,51 +45,105 @@ LIBRARY
   from the AE-20, so nothing gets overwritten until you choose.
 
 
-NOTES
------
+GETTING STARTED
+---------------
 
-- The small text next to the name is the version and build code (for example
-  v0.14.0 · 5d1212b). Mention it when reporting a problem.
-- Your Library is stored in this browser at http://localhost:8642. Export what
-  you want to keep as files.
-- The status light top right shows when the AE-20 is unplugged or off; click
-  it to reconnect.
-- Firefox and Safari can't talk to MIDI devices this way; use Chrome or Edge.
+You need a Roland AE-20, a USB-C data cable, and Chrome or Edge on Windows or
+macOS.
+
+1. If your computer doesn't list the AE-20 as a MIDI device, install the
+   Aerophone USB driver (roland.com > Support > Aerophone AE-20 > Updates &
+   Drivers).
+
+2. Connect the AE-20 and turn it on. Close Roland's phone app (or turn
+   Bluetooth off on the AE-20) so the two don't compete.
+
+
+RUN IT
+------
+
+No install or build step, and no internet connection needed. Windows uses its
+built-in PowerShell; macOS and Linux need Python 3.
+
+Download the zip and extract it (the easiest way):
+  https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip
+
+Or with git:
+  git clone https://github.com/wrongwaycorrigan/aerophoneCompanion.git
+  cd aerophoneCompanion
+
+Then start the app in that folder:
+
+  Windows   Double-click "Start Aerophone Companion (Windows).bat"
+            or run: powershell -ExecutionPolicy Bypass -File serve.ps1
+
+  macOS     Double-click "Start Aerophone Companion (Mac).command"
+            (right-click > Open the first time)
+            or run: sh "Start Aerophone Companion (Mac).command"
+
+  Linux     (untested) run: cd app && python3 -m http.server 8642 --bind 127.0.0.1
+
+The app opens at http://localhost:8642 in Chrome or Edge (on Linux, open it
+yourself). Keep the server window open while you play. When the browser asks
+to "control and reprogram your MIDI devices", click Allow.
+
+
+BACK UP FIRST
+-------------
+
+In Library, click "Back up" on the AE-20 side. It reads every user scene and
+your 12 favorites into a dated library on your computer and changes nothing
+on the instrument. User tones aren't included in the backup.
+
+
+TROUBLESHOOTING
+---------------
+
+- Windows warns about a downloaded file: right-click the zip > Properties >
+  tick Unblock, then extract again.
+- macOS won't open the start script: right-click it > Open, then Open again.
+  If it still refuses, open Terminal, type the first line below (with a space
+  at the end), drag the script onto the window and press Return. Then do the
+  same with the second:
+      xattr -d com.apple.quarantine
+      chmod +x
+- Firefox or Safari: they can't talk to MIDI devices this way. Use Chrome or
+  Edge.
+- Instrument unplugged or switched off: the status light at the top right
+  shows it. Click the light to reconnect.
+- Where your Library lives: in the browser at http://localhost:8642. Export
+  anything you want to keep as files.
+- Reporting a problem: include the version and build code shown next to the
+  app's name (for example v0.14.0 · 5d1212b).
 
 
 WHAT'S INSIDE
 -------------
 
-app/    The app itself. app/data.js holds facts about the AE-20 (parameter
-        addresses, ranges, effect types and settings, tone names), built from
-        Roland's public documents for the AE-30/AE-20: the MIDI Implementation,
-        the Parameter Guide and the Scene List (roland.com > Support >
-        Aerophone AE-20 > Owner's Manuals). Scene and user tone names are read
-        from your instrument.
+app/          The app itself. app/data.js holds facts about the AE-20
+              (parameter addresses, ranges, effect types and settings, tone
+              names), built from Roland's public documents for the
+              AE-30/AE-20: the MIDI Implementation, the Parameter Guide and
+              the Scene List. Scene and user tone names are read from your
+              instrument.
 
-tools/  Rebuilds app/data.js from newer editions of those documents:
+tools/        Rebuilds app/data.js from newer editions of those documents.
+              Needs Python 3, pdftotext and the pdfplumber package.
 
-          python3 tools/build_data.py <MIDI Implementation.pdf> \
-                  <Parameter Guide.pdf> <Scene List.pdf> app/data.js
-          python3 tools/stamp.py app
+docs/images/  Images for the GitHub page.
 
-        Needs Python 3, pdftotext and the pdfplumber package.
+  python3 tools/build_data.py "MIDI Implementation.pdf" "Parameter Guide.pdf" "Scene List.pdf" app/data.js
+  python3 tools/stamp.py app
 
 
 LICENSE AND NO WARRANTY
 -----------------------
 
-Released under the MIT License; see LICENSE.txt.
-
-Aerophone Companion is free software provided "as is", without warranty of any
-kind, express or implied, including but not limited to the warranties of
-merchantability, fitness for a particular purpose and non-infringement. In no
-event shall the author be liable for any claim, damages or other liability,
-whether in an action of contract, tort or otherwise, arising from, out of or
-in connection with the software or the use or other dealings in the software.
-This includes, without limitation, loss or corruption of scenes, tones,
-settings or other data on your instrument or computer, and any damage to
-equipment.
+Released under the MIT License. Aerophone Companion is free software provided
+"as is", without warranty of any kind. The author isn't liable for any
+damages, including loss or corruption of scenes, tones, settings or other data
+on your instrument or computer, or damage to equipment. See LICENSE.txt for
+the full terms.
 
 ==============================================================================
 Aerophone Companion is an independent, open source project and isn't

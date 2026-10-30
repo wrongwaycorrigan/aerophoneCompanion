@@ -67,12 +67,29 @@ You need a Roland AE-20, a USB-C **data** cable, and Chrome or Edge on Windows o
 
 1. If your computer doesn't list the AE-20 as a MIDI device, install the Aerophone USB driver (roland.com › Support › Aerophone AE-20 › Updates & Drivers).
 2. Connect the AE-20 and turn it on. Close Roland's phone app (or turn Bluetooth off on the AE-20) so the two don't compete.
-3. [Download the zip](https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip), extract it, and start the app:
-   - **Windows:** double-click `Start Aerophone Companion (Windows).bat`
-   - **Mac:** right-click `Start Aerophone Companion (Mac).command` › Open (needs `python3`)
 
-   A small server window opens, then the app in its own browser window. Keep the server window open while you play.
-4. When the browser asks to *control and reprogram your MIDI devices*, click **Allow**.
+### Run it
+
+No install or build step, and no internet connection needed. Windows uses its built-in PowerShell; macOS and Linux need Python 3.
+
+**Download:** [**⬇ Download ZIP**](https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip), then extract it. This is the easiest way.
+
+**Or with git:**
+
+```sh
+git clone https://github.com/wrongwaycorrigan/aerophoneCompanion.git
+cd aerophoneCompanion
+```
+
+Then start the app in that folder:
+
+| System | Double-click | Or in a terminal |
+| --- | --- | --- |
+| Windows | `Start Aerophone Companion (Windows).bat` | `powershell -ExecutionPolicy Bypass -File serve.ps1` |
+| macOS | `Start Aerophone Companion (Mac).command`<br>(right-click › Open the first time) | `sh "Start Aerophone Companion (Mac).command"` |
+| Linux (untested) | | `cd app && python3 -m http.server 8642 --bind 127.0.0.1` |
+
+The app opens at [http://localhost:8642](http://localhost:8642) in Chrome or Edge (on Linux, open it yourself). Keep the server window open while you play. When the browser asks to *control and reprogram your MIDI devices*, click **Allow**.
 
 > [!TIP]
 > **Back up first.** In Library, click **Back up** on the AE-20 side. It reads every user scene and your 12 favorites into a dated library on your computer and changes nothing on the instrument. User tones aren't included in the backup.
@@ -81,11 +98,11 @@ You need a Roland AE-20, a USB-C **data** cable, and Chrome or Edge on Windows o
 <summary><b>Troubleshooting</b></summary>
 
 - **Windows warns about a downloaded file:** right-click the zip › Properties › tick **Unblock**, then extract again.
+- **macOS won't open the start script:** right-click it › **Open**, then **Open** again. If it still refuses, open Terminal, type `xattr -d com.apple.quarantine ` (with a space at the end), drag the script onto the window and press Return. Do the same with `chmod +x `.
 - **Firefox or Safari:** they can't talk to MIDI devices this way. Use Chrome or Edge.
 - **Instrument unplugged or switched off:** the status light at the top right shows it. Click the light to reconnect.
 - **Where your Library lives:** in the browser at `http://localhost:8642`. Export anything you want to keep as files.
 - **Reporting a problem:** include the version and build code shown next to the app's name (for example `v0.14.0 · 5d1212b`).
-- **macOS won't open the start script:** right-click it › **Open**, then **Open** again. If it still refuses, run `xattr -d com.apple.quarantine` and `chmod +x` on it in Terminal (type each command, then drag the script onto the Terminal window).
 
 </details>
 
