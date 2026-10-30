@@ -9,7 +9,7 @@ import datetime, hashlib, os, sys
 app = sys.argv[1]
 version = sys.argv[2] if len(sys.argv) > 2 else '0.9.0'
 h = hashlib.sha1()
-for f in ('app.js', 'app.css', 'index.html', 'data.js'):
+for f in ('app.js', 'app.css', 'index.html', 'data.js', 'zen.js'):
     h.update(f.encode()); h.update(open(os.path.join(app, f), 'rb').read())
 build = h.hexdigest()[:7]
 date = datetime.date.today().isoformat()

@@ -1,0 +1,3526 @@
+{
+ "common": {
+  "copies": 1,
+  "stride": 0,
+  "base": 16,
+  "fields": [
+   {
+    "name": "Name",
+    "ae": 0,
+    "size": 65542,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 1,
+    "size": 65542,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 2,
+    "size": 65542,
+    "centre": 0,
+    "pos": 2,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 3,
+    "size": 65542,
+    "centre": 0,
+    "pos": 3,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 4,
+    "size": 65542,
+    "centre": 0,
+    "pos": 4,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 5,
+    "size": 65542,
+    "centre": 0,
+    "pos": 5,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 6,
+    "size": 65542,
+    "centre": 0,
+    "pos": 6,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 7,
+    "size": 65542,
+    "centre": 0,
+    "pos": 7,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 8,
+    "size": 65542,
+    "centre": 0,
+    "pos": 8,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 9,
+    "size": 65542,
+    "centre": 0,
+    "pos": 9,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 10,
+    "size": 65542,
+    "centre": 0,
+    "pos": 10,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 11,
+    "size": 65542,
+    "centre": 0,
+    "pos": 11,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 12,
+    "size": 65542,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 13,
+    "size": 65542,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 14,
+    "size": 65542,
+    "centre": 0,
+    "pos": 14,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Name",
+    "ae": 15,
+    "size": 65542,
+    "centre": 0,
+    "pos": 15,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Category",
+    "ae": 16,
+    "size": 65541,
+    "centre": 0,
+    "pos": 16,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Level",
+    "ae": 21,
+    "size": 65542,
+    "centre": 0,
+    "pos": 20,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Pan",
+    "ae": 22,
+    "size": 65542,
+    "centre": 64,
+    "pos": 21,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Priority",
+    "ae": 23,
+    "size": 65536,
+    "centre": 0,
+    "pos": 22,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Tone Coarse Tune",
+    "ae": 24,
+    "size": 65542,
+    "centre": 64,
+    "pos": 23,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Tone Fine Tune",
+    "ae": 25,
+    "size": 65542,
+    "centre": 64,
+    "pos": 24,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Octave Shift",
+    "ae": 26,
+    "size": 65542,
+    "centre": 64,
+    "pos": 25,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Stretch Tune Depth",
+    "ae": 27,
+    "size": 65537,
+    "centre": 0,
+    "pos": 26,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Analog Feel",
+    "ae": 28,
+    "size": 65542,
+    "centre": 0,
+    "pos": 27,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Mono/Poly",
+    "ae": 29,
+    "size": 65536,
+    "centre": 0,
+    "pos": 28,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Legato Switch",
+    "ae": 30,
+    "size": 65536,
+    "centre": 0,
+    "pos": 30,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Legato Retrigger Interval",
+    "ae": 31,
+    "size": 65539,
+    "centre": 0,
+    "pos": 32,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Switch",
+    "ae": 32,
+    "size": 65536,
+    "centre": 0,
+    "pos": 33,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Mode",
+    "ae": 33,
+    "size": 65536,
+    "centre": 0,
+    "pos": 34,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Type",
+    "ae": 34,
+    "size": 65536,
+    "centre": 0,
+    "pos": 35,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Start",
+    "ae": 35,
+    "size": 65536,
+    "centre": 0,
+    "pos": 36,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Time",
+    "ae": 36,
+    "size": 65544,
+    "centre": 0,
+    "pos": 38,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Bend Range Up",
+    "ae": 40,
+    "size": 65541,
+    "centre": 0,
+    "pos": 40,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Bend Range Down",
+    "ae": 41,
+    "size": 65541,
+    "centre": 0,
+    "pos": 41,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Bend Mode",
+    "ae": 42,
+    "size": 65536,
+    "centre": 0,
+    "pos": 42,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Soft Level Sens",
+    "ae": 43,
+    "size": 65542,
+    "centre": 0,
+    "pos": 43,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Portamento Curve Type",
+    "ae": 52,
+    "size": 65537,
+    "centre": 0,
+    "pos": 48,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "mfx": {
+  "copies": 1,
+  "stride": 0,
+  "base": 80,
+  "fields": [
+   {
+    "name": "MFX Type",
+    "ae": 0,
+    "size": 65542,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX Switch",
+    "ae": 1,
+    "size": 65536,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX Chorus Send Level",
+    "ae": 2,
+    "size": 65542,
+    "centre": 0,
+    "pos": 2,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX Reverb Send Level",
+    "ae": 3,
+    "size": 65542,
+    "centre": 0,
+    "pos": 3,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlSrc 1",
+    "ae": 4,
+    "size": 65542,
+    "centre": 0,
+    "pos": 4,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlSens 1",
+    "ae": 5,
+    "size": 65542,
+    "centre": 64,
+    "pos": 5,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "MFX CtrlSrc 2",
+    "ae": 6,
+    "size": 65542,
+    "centre": 0,
+    "pos": 6,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlSens 2",
+    "ae": 7,
+    "size": 65542,
+    "centre": 64,
+    "pos": 7,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "MFX CtrlSrc 3",
+    "ae": 8,
+    "size": 65542,
+    "centre": 0,
+    "pos": 8,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlSens 3",
+    "ae": 9,
+    "size": 65542,
+    "centre": 64,
+    "pos": 9,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "MFX CtrlSrc 4",
+    "ae": 10,
+    "size": 65542,
+    "centre": 0,
+    "pos": 10,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlSens 4",
+    "ae": 11,
+    "size": 65542,
+    "centre": 64,
+    "pos": 11,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "MFX CtrlAsgn",
+    "ae": 12,
+    "size": 65539,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlAsgn",
+    "ae": 13,
+    "size": 65539,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlAsgn",
+    "ae": 14,
+    "size": 65539,
+    "centre": 0,
+    "pos": 14,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX CtrlAsgn",
+    "ae": 15,
+    "size": 65539,
+    "centre": 0,
+    "pos": 15,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "MFX Parameter 1",
+    "ae": 16,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 16,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 2",
+    "ae": 20,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 18,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 3",
+    "ae": 24,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 20,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 4",
+    "ae": 28,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 22,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 5",
+    "ae": 32,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 24,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 6",
+    "ae": 36,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 26,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 7",
+    "ae": 40,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 28,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 8",
+    "ae": 44,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 30,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 9",
+    "ae": 48,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 32,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 10",
+    "ae": 52,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 34,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 11",
+    "ae": 56,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 36,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 12",
+    "ae": 60,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 38,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 13",
+    "ae": 64,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 40,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 14",
+    "ae": 68,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 42,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 15",
+    "ae": 72,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 44,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 16",
+    "ae": 76,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 46,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 17",
+    "ae": 80,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 48,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 18",
+    "ae": 84,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 50,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 19",
+    "ae": 88,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 52,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 20",
+    "ae": 92,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 54,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 21",
+    "ae": 96,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 56,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 22",
+    "ae": 100,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 58,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 23",
+    "ae": 104,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 60,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 24",
+    "ae": 108,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 62,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 25",
+    "ae": 112,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 64,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 26",
+    "ae": 116,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 66,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 27",
+    "ae": 120,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 68,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 28",
+    "ae": 124,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 70,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 29",
+    "ae": 128,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 72,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 30",
+    "ae": 132,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 74,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 31",
+    "ae": 136,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 76,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "MFX Parameter 32",
+    "ae": 140,
+    "size": 65544,
+    "centre": 32768,
+    "pos": 78,
+    "w": 2,
+    "signed": true
+   }
+  ]
+ },
+ "pmt": {
+  "copies": 1,
+  "stride": 0,
+  "base": 164,
+  "fields": [
+   {
+    "name": "Velocity Control",
+    "ae": 0,
+    "size": 65537,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "PMT Level Curve",
+    "ae": 1,
+    "size": 65536,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Partial Switch",
+    "ae": 2,
+    "size": 65536,
+    "centre": 0,
+    "pos": 4,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Lower",
+    "ae": 3,
+    "size": 65542,
+    "centre": 0,
+    "pos": 5,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Upper",
+    "ae": 4,
+    "size": 65542,
+    "centre": 0,
+    "pos": 9,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Lower",
+    "ae": 5,
+    "size": 65542,
+    "centre": 0,
+    "pos": 10,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Upper",
+    "ae": 6,
+    "size": 65542,
+    "centre": 0,
+    "pos": 11,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Lower",
+    "ae": 7,
+    "size": 65542,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Upper",
+    "ae": 8,
+    "size": 65542,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Lower",
+    "ae": 9,
+    "size": 65542,
+    "centre": 0,
+    "pos": 14,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Upper",
+    "ae": 10,
+    "size": 65542,
+    "centre": 0,
+    "pos": 15,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Partial Switch",
+    "ae": 11,
+    "size": 65536,
+    "centre": 0,
+    "pos": 16,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Lower",
+    "ae": 12,
+    "size": 65542,
+    "centre": 0,
+    "pos": 17,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Upper",
+    "ae": 13,
+    "size": 65542,
+    "centre": 0,
+    "pos": 21,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Lower",
+    "ae": 14,
+    "size": 65542,
+    "centre": 0,
+    "pos": 22,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Upper",
+    "ae": 15,
+    "size": 65542,
+    "centre": 0,
+    "pos": 23,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Lower",
+    "ae": 16,
+    "size": 65542,
+    "centre": 0,
+    "pos": 24,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Upper",
+    "ae": 17,
+    "size": 65542,
+    "centre": 0,
+    "pos": 25,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Lower",
+    "ae": 18,
+    "size": 65542,
+    "centre": 0,
+    "pos": 26,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Upper",
+    "ae": 19,
+    "size": 65542,
+    "centre": 0,
+    "pos": 27,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Partial Switch",
+    "ae": 20,
+    "size": 65536,
+    "centre": 0,
+    "pos": 28,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Lower",
+    "ae": 21,
+    "size": 65542,
+    "centre": 0,
+    "pos": 29,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Upper",
+    "ae": 22,
+    "size": 65542,
+    "centre": 0,
+    "pos": 33,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Lower",
+    "ae": 23,
+    "size": 65542,
+    "centre": 0,
+    "pos": 34,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Upper",
+    "ae": 24,
+    "size": 65542,
+    "centre": 0,
+    "pos": 35,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Lower",
+    "ae": 25,
+    "size": 65542,
+    "centre": 0,
+    "pos": 36,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Upper",
+    "ae": 26,
+    "size": 65542,
+    "centre": 0,
+    "pos": 37,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Lower",
+    "ae": 27,
+    "size": 65542,
+    "centre": 0,
+    "pos": 38,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Upper",
+    "ae": 28,
+    "size": 65542,
+    "centre": 0,
+    "pos": 39,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Partial Switch",
+    "ae": 29,
+    "size": 65536,
+    "centre": 0,
+    "pos": 40,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Lower",
+    "ae": 30,
+    "size": 65542,
+    "centre": 0,
+    "pos": 41,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyRange Upper",
+    "ae": 31,
+    "size": 65542,
+    "centre": 0,
+    "pos": 45,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Lower",
+    "ae": 32,
+    "size": 65542,
+    "centre": 0,
+    "pos": 46,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "KeyFade Upper",
+    "ae": 33,
+    "size": 65542,
+    "centre": 0,
+    "pos": 47,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Lower",
+    "ae": 34,
+    "size": 65542,
+    "centre": 0,
+    "pos": 48,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloRange Upper",
+    "ae": 35,
+    "size": 65542,
+    "centre": 0,
+    "pos": 49,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Lower",
+    "ae": 36,
+    "size": 65542,
+    "centre": 0,
+    "pos": 50,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VeloFade Upper",
+    "ae": 37,
+    "size": 65542,
+    "centre": 0,
+    "pos": 51,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "ptl": {
+  "copies": 4,
+  "stride": 124,
+  "base": 216,
+  "fields": [
+   {
+    "name": "Level",
+    "ae": 0,
+    "size": 65542,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Coarse Tune",
+    "ae": 1,
+    "size": 65542,
+    "centre": 64,
+    "pos": 2,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Fine Tune",
+    "ae": 2,
+    "size": 65542,
+    "centre": 64,
+    "pos": 3,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Random Pitch Depth",
+    "ae": 3,
+    "size": 65544,
+    "centre": 0,
+    "pos": 4,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pan",
+    "ae": 7,
+    "size": 65542,
+    "centre": 64,
+    "pos": 6,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pan Keyfollow",
+    "ae": 8,
+    "size": 65543,
+    "centre": 128,
+    "pos": 7,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Random Pan Depth",
+    "ae": 10,
+    "size": 65541,
+    "centre": 0,
+    "pos": 8,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Alternate Pan Depth",
+    "ae": 11,
+    "size": 65542,
+    "centre": 64,
+    "pos": 9,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Envelope Mode",
+    "ae": 12,
+    "size": 65536,
+    "centre": 0,
+    "pos": 10,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Delay Mode",
+    "ae": 13,
+    "size": 65537,
+    "centre": 0,
+    "pos": 11,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "DelayTime Sync",
+    "ae": 14,
+    "size": 65536,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "DelayTime (note)",
+    "ae": 15,
+    "size": 65540,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "DelayTime",
+    "ae": 16,
+    "size": 65544,
+    "centre": 0,
+    "pos": 14,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Chorus Send Level",
+    "ae": 20,
+    "size": 65542,
+    "centre": 0,
+    "pos": 16,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Reverb Send Level",
+    "ae": 21,
+    "size": 65542,
+    "centre": 0,
+    "pos": 17,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Receive Bender",
+    "ae": 22,
+    "size": 65536,
+    "centre": 0,
+    "pos": 18,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Receive Expression",
+    "ae": 23,
+    "size": 65536,
+    "centre": 0,
+    "pos": 19,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Receive Hold-1",
+    "ae": 24,
+    "size": 65536,
+    "centre": 0,
+    "pos": 20,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Redamper Switch",
+    "ae": 25,
+    "size": 65536,
+    "centre": 0,
+    "pos": 21,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Output Assign",
+    "ae": 26,
+    "size": 65536,
+    "centre": 0,
+    "pos": 22,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Wave Group Type",
+    "ae": 27,
+    "size": 65537,
+    "centre": 0,
+    "pos": 23,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Wave Group ID",
+    "ae": 28,
+    "size": 65544,
+    "centre": 0,
+    "pos": 24,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Wave Number L",
+    "ae": 32,
+    "size": 65544,
+    "centre": 0,
+    "pos": 26,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Wave Number R",
+    "ae": 36,
+    "size": 65544,
+    "centre": 0,
+    "pos": 28,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Gain",
+    "ae": 40,
+    "size": 65538,
+    "centre": 0,
+    "pos": 30,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "FXM Switch",
+    "ae": 41,
+    "size": 65536,
+    "centre": 0,
+    "pos": 31,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "FXM Color",
+    "ae": 42,
+    "size": 65538,
+    "centre": 0,
+    "pos": 32,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "FXM Depth",
+    "ae": 43,
+    "size": 65540,
+    "centre": 0,
+    "pos": 33,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Pitch Keyfollow",
+    "ae": 44,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 34,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Soft EQ Sens",
+    "ae": 48,
+    "size": 65542,
+    "centre": 0,
+    "pos": 36,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVF Filter Type",
+    "ae": 49,
+    "size": 65538,
+    "centre": 0,
+    "pos": 37,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVF Cutoff Frequency",
+    "ae": 50,
+    "size": 65544,
+    "centre": 0,
+    "pos": 40,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Cutoff Keyfollow",
+    "ae": 54,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 42,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "TVF Cutoff Velocity Curve",
+    "ae": 58,
+    "size": 65538,
+    "centre": 0,
+    "pos": 44,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVF Cutoff Velocity Sens",
+    "ae": 59,
+    "size": 65543,
+    "centre": 128,
+    "pos": 45,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Resonance",
+    "ae": 61,
+    "size": 65544,
+    "centre": 0,
+    "pos": 46,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Resonance Velocity Sens",
+    "ae": 65,
+    "size": 65543,
+    "centre": 128,
+    "pos": 48,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Bias Level",
+    "ae": 67,
+    "size": 65543,
+    "centre": 128,
+    "pos": 49,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Bias Position",
+    "ae": 69,
+    "size": 65542,
+    "centre": 0,
+    "pos": 50,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Bias Direction",
+    "ae": 70,
+    "size": 65537,
+    "centre": 0,
+    "pos": 51,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVA Level Velocity Curve",
+    "ae": 71,
+    "size": 65538,
+    "centre": 0,
+    "pos": 52,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVA Level Velocity Sens",
+    "ae": 72,
+    "size": 65543,
+    "centre": 128,
+    "pos": 53,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Time Keyfollow",
+    "ae": 74,
+    "size": 65543,
+    "centre": 128,
+    "pos": 54,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Env Time Keyfollow",
+    "ae": 76,
+    "size": 65543,
+    "centre": 128,
+    "pos": 55,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVA Env Time Keyfollow",
+    "ae": 78,
+    "size": 65543,
+    "centre": 128,
+    "pos": 56,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Vibrato Pitch Sens",
+    "ae": 80,
+    "size": 65543,
+    "centre": 128,
+    "pos": 57,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Vibrato Cutoff Sens",
+    "ae": 82,
+    "size": 65543,
+    "centre": 128,
+    "pos": 58,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Vibrato Level Sens",
+    "ae": 84,
+    "size": 65543,
+    "centre": 128,
+    "pos": 59,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Source",
+    "ae": 86,
+    "size": 65542,
+    "centre": 0,
+    "pos": 60,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Destination 1",
+    "ae": 87,
+    "size": 65541,
+    "centre": 0,
+    "pos": 61,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 1",
+    "ae": 88,
+    "size": 65542,
+    "centre": 64,
+    "pos": 62,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 2",
+    "ae": 89,
+    "size": 65541,
+    "centre": 0,
+    "pos": 63,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 2",
+    "ae": 90,
+    "size": 65542,
+    "centre": 64,
+    "pos": 64,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 3",
+    "ae": 91,
+    "size": 65541,
+    "centre": 0,
+    "pos": 65,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 3",
+    "ae": 92,
+    "size": 65542,
+    "centre": 64,
+    "pos": 66,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 4",
+    "ae": 93,
+    "size": 65541,
+    "centre": 0,
+    "pos": 67,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 4",
+    "ae": 94,
+    "size": 65542,
+    "centre": 64,
+    "pos": 68,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Source",
+    "ae": 95,
+    "size": 65542,
+    "centre": 0,
+    "pos": 72,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Destination 1",
+    "ae": 96,
+    "size": 65541,
+    "centre": 0,
+    "pos": 73,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 1",
+    "ae": 97,
+    "size": 65542,
+    "centre": 64,
+    "pos": 74,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 2",
+    "ae": 98,
+    "size": 65541,
+    "centre": 0,
+    "pos": 75,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 2",
+    "ae": 99,
+    "size": 65542,
+    "centre": 64,
+    "pos": 76,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 3",
+    "ae": 100,
+    "size": 65541,
+    "centre": 0,
+    "pos": 77,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 3",
+    "ae": 101,
+    "size": 65542,
+    "centre": 64,
+    "pos": 78,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 4",
+    "ae": 102,
+    "size": 65541,
+    "centre": 0,
+    "pos": 79,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 4",
+    "ae": 103,
+    "size": 65542,
+    "centre": 64,
+    "pos": 80,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Source",
+    "ae": 104,
+    "size": 65542,
+    "centre": 0,
+    "pos": 84,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Destination 1",
+    "ae": 105,
+    "size": 65541,
+    "centre": 0,
+    "pos": 85,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 1",
+    "ae": 106,
+    "size": 65542,
+    "centre": 64,
+    "pos": 86,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 2",
+    "ae": 107,
+    "size": 65541,
+    "centre": 0,
+    "pos": 87,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 2",
+    "ae": 108,
+    "size": 65542,
+    "centre": 64,
+    "pos": 88,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 3",
+    "ae": 109,
+    "size": 65541,
+    "centre": 0,
+    "pos": 89,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 3",
+    "ae": 110,
+    "size": 65542,
+    "centre": 64,
+    "pos": 90,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 4",
+    "ae": 111,
+    "size": 65541,
+    "centre": 0,
+    "pos": 91,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 4",
+    "ae": 112,
+    "size": 65542,
+    "centre": 64,
+    "pos": 92,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Source",
+    "ae": 113,
+    "size": 65542,
+    "centre": 0,
+    "pos": 96,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Destination 1",
+    "ae": 114,
+    "size": 65541,
+    "centre": 0,
+    "pos": 97,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 1",
+    "ae": 115,
+    "size": 65542,
+    "centre": 64,
+    "pos": 98,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 2",
+    "ae": 116,
+    "size": 65541,
+    "centre": 0,
+    "pos": 99,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 2",
+    "ae": 117,
+    "size": 65542,
+    "centre": 64,
+    "pos": 100,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 3",
+    "ae": 118,
+    "size": 65541,
+    "centre": 0,
+    "pos": 101,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 3",
+    "ae": 119,
+    "size": 65542,
+    "centre": 64,
+    "pos": 102,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Destination 4",
+    "ae": 120,
+    "size": 65541,
+    "centre": 0,
+    "pos": 103,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Sens 4",
+    "ae": 121,
+    "size": 65542,
+    "centre": 64,
+    "pos": 104,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Damper Free Note",
+    "ae": 122,
+    "size": 65542,
+    "centre": 0,
+    "pos": 108,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Stereo Width",
+    "ae": 123,
+    "size": 65542,
+    "centre": 0,
+    "pos": 109,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Stereo Detune",
+    "ae": 124,
+    "size": 65542,
+    "centre": 64,
+    "pos": 110,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Damper Free Decay Offset",
+    "ae": 125,
+    "size": 65543,
+    "centre": 128,
+    "pos": 111,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Wave Tempo Sync",
+    "ae": 127,
+    "size": 65536,
+    "centre": 0,
+    "pos": 112,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "ptlFenv": {
+  "copies": 4,
+  "stride": 24,
+  "base": 808,
+  "fields": [
+   {
+    "name": "TVF Env Depth",
+    "ae": 0,
+    "size": 65542,
+    "centre": 64,
+    "pos": 0,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Env Velocity Curve",
+    "ae": 1,
+    "size": 65538,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Velocity Sens",
+    "ae": 2,
+    "size": 65543,
+    "centre": 128,
+    "pos": 2,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Env T1 Velocity Sens",
+    "ae": 4,
+    "size": 65543,
+    "centre": 128,
+    "pos": 3,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Env T4 Velocity Sens",
+    "ae": 6,
+    "size": 65543,
+    "centre": 128,
+    "pos": 4,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Env Time1",
+    "ae": 8,
+    "size": 65544,
+    "centre": 0,
+    "pos": 6,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Time2",
+    "ae": 12,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Time3",
+    "ae": 16,
+    "size": 65544,
+    "centre": 0,
+    "pos": 10,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Time4",
+    "ae": 20,
+    "size": 65544,
+    "centre": 0,
+    "pos": 12,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Level0",
+    "ae": 24,
+    "size": 65544,
+    "centre": 0,
+    "pos": 14,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Level1",
+    "ae": 28,
+    "size": 65544,
+    "centre": 0,
+    "pos": 16,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Level2",
+    "ae": 32,
+    "size": 65544,
+    "centre": 0,
+    "pos": 18,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Level3",
+    "ae": 36,
+    "size": 65544,
+    "centre": 0,
+    "pos": 20,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Level4",
+    "ae": 40,
+    "size": 65544,
+    "centre": 0,
+    "pos": 22,
+    "w": 2,
+    "signed": false
+   }
+  ]
+ },
+ "ptlAenv": {
+  "copies": 4,
+  "stride": 16,
+  "base": 904,
+  "fields": [
+   {
+    "name": "TVA Env Time1 Velocity Sens",
+    "ae": 0,
+    "size": 65543,
+    "centre": 128,
+    "pos": 0,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVA Env Time4 Velocity Sens",
+    "ae": 2,
+    "size": 65543,
+    "centre": 128,
+    "pos": 1,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVA Env Time1",
+    "ae": 4,
+    "size": 65544,
+    "centre": 0,
+    "pos": 2,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Time2",
+    "ae": 8,
+    "size": 65544,
+    "centre": 0,
+    "pos": 4,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Time3",
+    "ae": 12,
+    "size": 65544,
+    "centre": 0,
+    "pos": 6,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Time4",
+    "ae": 16,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Level1",
+    "ae": 20,
+    "size": 65544,
+    "centre": 0,
+    "pos": 10,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Level2",
+    "ae": 24,
+    "size": 65544,
+    "centre": 0,
+    "pos": 12,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "TVA Env Level3",
+    "ae": 28,
+    "size": 65544,
+    "centre": 0,
+    "pos": 14,
+    "w": 2,
+    "signed": false
+   }
+  ]
+ },
+ "ptlLfo": {
+  "copies": 4,
+  "stride": 104,
+  "base": 968,
+  "fields": [
+   {
+    "name": "Waveform",
+    "ae": 0,
+    "size": 65539,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate Sync",
+    "ae": 1,
+    "size": 65536,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate (note)",
+    "ae": 2,
+    "size": 65540,
+    "centre": 0,
+    "pos": 2,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Size",
+    "ae": 3,
+    "size": 65539,
+    "centre": 0,
+    "pos": 3,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate",
+    "ae": 4,
+    "size": 65544,
+    "centre": 0,
+    "pos": 4,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Offset",
+    "ae": 8,
+    "size": 65543,
+    "centre": 128,
+    "pos": 6,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Rate Detune",
+    "ae": 10,
+    "size": 65542,
+    "centre": 0,
+    "pos": 7,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Delay Time",
+    "ae": 11,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Delay Time Keyfolow",
+    "ae": 15,
+    "size": 65543,
+    "centre": 128,
+    "pos": 10,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Fade Mode",
+    "ae": 17,
+    "size": 65537,
+    "centre": 0,
+    "pos": 11,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Fade Time",
+    "ae": 18,
+    "size": 65544,
+    "centre": 0,
+    "pos": 12,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Key Trigger",
+    "ae": 22,
+    "size": 65536,
+    "centre": 0,
+    "pos": 14,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Pitch Depth",
+    "ae": 23,
+    "size": 65543,
+    "centre": 128,
+    "pos": 15,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Depth",
+    "ae": 25,
+    "size": 65543,
+    "centre": 128,
+    "pos": 16,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVA Depth",
+    "ae": 27,
+    "size": 65543,
+    "centre": 128,
+    "pos": 17,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "PAN Depth",
+    "ae": 29,
+    "size": 65542,
+    "centre": 64,
+    "pos": 18,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Phase Position",
+    "ae": 30,
+    "size": 65537,
+    "centre": 0,
+    "pos": 19,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step",
+    "ae": 31,
+    "size": 65543,
+    "centre": 128,
+    "pos": 20,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 33,
+    "size": 65543,
+    "centre": 128,
+    "pos": 21,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 35,
+    "size": 65543,
+    "centre": 128,
+    "pos": 22,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 37,
+    "size": 65543,
+    "centre": 128,
+    "pos": 23,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 39,
+    "size": 65543,
+    "centre": 128,
+    "pos": 24,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 41,
+    "size": 65543,
+    "centre": 128,
+    "pos": 25,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 43,
+    "size": 65543,
+    "centre": 128,
+    "pos": 26,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 45,
+    "size": 65543,
+    "centre": 128,
+    "pos": 27,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 47,
+    "size": 65543,
+    "centre": 128,
+    "pos": 28,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 49,
+    "size": 65543,
+    "centre": 128,
+    "pos": 29,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 51,
+    "size": 65543,
+    "centre": 128,
+    "pos": 30,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 53,
+    "size": 65543,
+    "centre": 128,
+    "pos": 31,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 55,
+    "size": 65543,
+    "centre": 128,
+    "pos": 32,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 57,
+    "size": 65543,
+    "centre": 128,
+    "pos": 33,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 59,
+    "size": 65543,
+    "centre": 128,
+    "pos": 34,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 61,
+    "size": 65543,
+    "centre": 128,
+    "pos": 35,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step Curve",
+    "ae": 63,
+    "size": 65541,
+    "centre": 0,
+    "pos": 36,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 64,
+    "size": 65541,
+    "centre": 0,
+    "pos": 37,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 65,
+    "size": 65541,
+    "centre": 0,
+    "pos": 38,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 66,
+    "size": 65541,
+    "centre": 0,
+    "pos": 39,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 67,
+    "size": 65541,
+    "centre": 0,
+    "pos": 40,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 68,
+    "size": 65541,
+    "centre": 0,
+    "pos": 41,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 69,
+    "size": 65541,
+    "centre": 0,
+    "pos": 42,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 70,
+    "size": 65541,
+    "centre": 0,
+    "pos": 43,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 71,
+    "size": 65541,
+    "centre": 0,
+    "pos": 44,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 72,
+    "size": 65541,
+    "centre": 0,
+    "pos": 45,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 73,
+    "size": 65541,
+    "centre": 0,
+    "pos": 46,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 74,
+    "size": 65541,
+    "centre": 0,
+    "pos": 47,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 75,
+    "size": 65541,
+    "centre": 0,
+    "pos": 48,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 76,
+    "size": 65541,
+    "centre": 0,
+    "pos": 49,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 77,
+    "size": 65541,
+    "centre": 0,
+    "pos": 50,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 78,
+    "size": 65541,
+    "centre": 0,
+    "pos": 51,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Waveform",
+    "ae": 79,
+    "size": 65539,
+    "centre": 0,
+    "pos": 52,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate Sync",
+    "ae": 80,
+    "size": 65536,
+    "centre": 0,
+    "pos": 53,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate (note)",
+    "ae": 81,
+    "size": 65540,
+    "centre": 0,
+    "pos": 54,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Size",
+    "ae": 82,
+    "size": 65539,
+    "centre": 0,
+    "pos": 55,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Rate",
+    "ae": 83,
+    "size": 65544,
+    "centre": 0,
+    "pos": 56,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Offset",
+    "ae": 87,
+    "size": 65543,
+    "centre": 128,
+    "pos": 58,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Rate Detune",
+    "ae": 89,
+    "size": 65542,
+    "centre": 0,
+    "pos": 59,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Delay Time",
+    "ae": 90,
+    "size": 65544,
+    "centre": 0,
+    "pos": 60,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Delay Time Keyfolow",
+    "ae": 94,
+    "size": 65543,
+    "centre": 128,
+    "pos": 62,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Fade Mode",
+    "ae": 96,
+    "size": 65537,
+    "centre": 0,
+    "pos": 63,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Fade Time",
+    "ae": 97,
+    "size": 65544,
+    "centre": 0,
+    "pos": 64,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Key Trigger",
+    "ae": 101,
+    "size": 65536,
+    "centre": 0,
+    "pos": 66,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Pitch Depth",
+    "ae": 102,
+    "size": 65543,
+    "centre": 128,
+    "pos": 67,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVF Depth",
+    "ae": 104,
+    "size": 65543,
+    "centre": 128,
+    "pos": 68,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "TVA Depth",
+    "ae": 106,
+    "size": 65543,
+    "centre": 128,
+    "pos": 69,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "PAN Depth",
+    "ae": 108,
+    "size": 65542,
+    "centre": 64,
+    "pos": 70,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Phase Position",
+    "ae": 109,
+    "size": 65537,
+    "centre": 0,
+    "pos": 71,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step",
+    "ae": 110,
+    "size": 65543,
+    "centre": 128,
+    "pos": 72,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 112,
+    "size": 65543,
+    "centre": 128,
+    "pos": 73,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 114,
+    "size": 65543,
+    "centre": 128,
+    "pos": 74,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 116,
+    "size": 65543,
+    "centre": 128,
+    "pos": 75,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 118,
+    "size": 65543,
+    "centre": 128,
+    "pos": 76,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 120,
+    "size": 65543,
+    "centre": 128,
+    "pos": 77,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 122,
+    "size": 65543,
+    "centre": 128,
+    "pos": 78,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 124,
+    "size": 65543,
+    "centre": 128,
+    "pos": 79,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 126,
+    "size": 65543,
+    "centre": 128,
+    "pos": 80,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 128,
+    "size": 65543,
+    "centre": 128,
+    "pos": 81,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 130,
+    "size": 65543,
+    "centre": 128,
+    "pos": 82,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 132,
+    "size": 65543,
+    "centre": 128,
+    "pos": 83,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 134,
+    "size": 65543,
+    "centre": 128,
+    "pos": 84,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 136,
+    "size": 65543,
+    "centre": 128,
+    "pos": 85,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 138,
+    "size": 65543,
+    "centre": 128,
+    "pos": 86,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step",
+    "ae": 140,
+    "size": 65543,
+    "centre": 128,
+    "pos": 87,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Step Curve",
+    "ae": 142,
+    "size": 65541,
+    "centre": 0,
+    "pos": 88,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 143,
+    "size": 65541,
+    "centre": 0,
+    "pos": 89,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 144,
+    "size": 65541,
+    "centre": 0,
+    "pos": 90,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 145,
+    "size": 65541,
+    "centre": 0,
+    "pos": 91,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 146,
+    "size": 65541,
+    "centre": 0,
+    "pos": 92,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 147,
+    "size": 65541,
+    "centre": 0,
+    "pos": 93,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 148,
+    "size": 65541,
+    "centre": 0,
+    "pos": 94,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 149,
+    "size": 65541,
+    "centre": 0,
+    "pos": 95,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 150,
+    "size": 65541,
+    "centre": 0,
+    "pos": 96,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 151,
+    "size": 65541,
+    "centre": 0,
+    "pos": 97,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 152,
+    "size": 65541,
+    "centre": 0,
+    "pos": 98,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 153,
+    "size": 65541,
+    "centre": 0,
+    "pos": 99,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 154,
+    "size": 65541,
+    "centre": 0,
+    "pos": 100,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 155,
+    "size": 65541,
+    "centre": 0,
+    "pos": 101,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 156,
+    "size": 65541,
+    "centre": 0,
+    "pos": 102,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Step Curve",
+    "ae": 157,
+    "size": 65541,
+    "centre": 0,
+    "pos": 103,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "synCom": {
+  "copies": 1,
+  "stride": 0,
+  "base": 1448,
+  "fields": [
+   {
+    "name": "Unison Switch",
+    "ae": 0,
+    "size": 65536,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Unison Size",
+    "ae": 1,
+    "size": 65539,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Unison Detune",
+    "ae": 2,
+    "size": 65542,
+    "centre": 0,
+    "pos": 2,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Bend Range Fine Up",
+    "ae": 3,
+    "size": 65542,
+    "centre": 0,
+    "pos": 3,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Bend Range Fine Down",
+    "ae": 4,
+    "size": 65542,
+    "centre": 0,
+    "pos": 4,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Pitch Drift",
+    "ae": 5,
+    "size": 65543,
+    "centre": 0,
+    "pos": 5,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Condition",
+    "ae": 8,
+    "size": 65542,
+    "centre": 0,
+    "pos": 7,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "synPtl": {
+  "copies": 4,
+  "stride": 36,
+  "base": 1504,
+  "fields": [
+   {
+    "name": "OSC Type",
+    "ae": 0,
+    "size": 65538,
+    "centre": 0,
+    "pos": 0,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VA Waveform",
+    "ae": 1,
+    "size": 65539,
+    "centre": 0,
+    "pos": 1,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "PCM-Sync Wave Number",
+    "ae": 2,
+    "size": 65544,
+    "centre": 0,
+    "pos": 2,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pulse Width",
+    "ae": 6,
+    "size": 65542,
+    "centre": 0,
+    "pos": 4,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "PWM Depth",
+    "ae": 7,
+    "size": 65542,
+    "centre": 64,
+    "pos": 5,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "SuperSAW Detune",
+    "ae": 8,
+    "size": 65542,
+    "centre": 0,
+    "pos": 6,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Click Type",
+    "ae": 9,
+    "size": 65537,
+    "centre": 0,
+    "pos": 7,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "HPF Cutoff",
+    "ae": 10,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Filter Type",
+    "ae": 14,
+    "size": 65536,
+    "centre": 0,
+    "pos": 10,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Filter Slope",
+    "ae": 15,
+    "size": 65537,
+    "centre": 0,
+    "pos": 11,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "ADSREnv Switch",
+    "ae": 16,
+    "size": 65536,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Fat",
+    "ae": 17,
+    "size": 65542,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VCF Type",
+    "ae": 18,
+    "size": 65537,
+    "centre": 0,
+    "pos": 14,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "OSC Attenuator",
+    "ae": 19,
+    "size": 65543,
+    "centre": 0,
+    "pos": 15,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "Cutoff Keyfollow Base Point",
+    "ae": 21,
+    "size": 65542,
+    "centre": 0,
+    "pos": 16,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "VA Waveform Invert Switch",
+    "ae": 22,
+    "size": 65536,
+    "centre": 0,
+    "pos": 17,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "TVF Env Fine Depth",
+    "ae": 23,
+    "size": 65542,
+    "centre": 64,
+    "pos": 18,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "PENV LFO Trigger Switch",
+    "ae": 24,
+    "size": 65536,
+    "centre": 0,
+    "pos": 19,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "FENV LFO Trigger Switch",
+    "ae": 25,
+    "size": 65536,
+    "centre": 0,
+    "pos": 20,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "AENV LFO Trigger Switch",
+    "ae": 26,
+    "size": 65536,
+    "centre": 0,
+    "pos": 21,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "ptlPenv": {
+  "copies": 4,
+  "stride": 24,
+  "base": 712,
+  "fields": [
+   {
+    "name": "Pitch Env Depth",
+    "ae": 0,
+    "size": 65543,
+    "centre": 128,
+    "pos": 0,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Velocity Sens",
+    "ae": 2,
+    "size": 65543,
+    "centre": 128,
+    "pos": 1,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env T1 Velocity Sens",
+    "ae": 4,
+    "size": 65543,
+    "centre": 128,
+    "pos": 2,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env T4 Velocity Sens",
+    "ae": 6,
+    "size": 65543,
+    "centre": 128,
+    "pos": 3,
+    "w": 1,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Time1",
+    "ae": 8,
+    "size": 65544,
+    "centre": 0,
+    "pos": 4,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pitch Env Time2",
+    "ae": 12,
+    "size": 65544,
+    "centre": 0,
+    "pos": 6,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pitch Env Time3",
+    "ae": 16,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pitch Env Time4",
+    "ae": 20,
+    "size": 65544,
+    "centre": 0,
+    "pos": 10,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "Pitch Env Level0",
+    "ae": 24,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 12,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Level1",
+    "ae": 28,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 14,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Level2",
+    "ae": 32,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 16,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Level3",
+    "ae": 36,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 18,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Level4",
+    "ae": 40,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 20,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "Pitch Env Velocity Curve",
+    "ae": 44,
+    "size": 65538,
+    "centre": 0,
+    "pos": 22,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ },
+ "ptlEq": {
+  "copies": 4,
+  "stride": 16,
+  "base": 1384,
+  "fields": [
+   {
+    "name": "EQ Low Gain",
+    "ae": 0,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 0,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "EQ Mid Gain",
+    "ae": 4,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 2,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "EQ High Gain",
+    "ae": 8,
+    "size": 65544,
+    "centre": 1024,
+    "pos": 4,
+    "w": 2,
+    "signed": true
+   },
+   {
+    "name": "EQ Low Frequency",
+    "ae": 12,
+    "size": 65544,
+    "centre": 0,
+    "pos": 6,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "EQ Mid Frequency",
+    "ae": 16,
+    "size": 65544,
+    "centre": 0,
+    "pos": 8,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "EQ High Frequency",
+    "ae": 20,
+    "size": 65544,
+    "centre": 0,
+    "pos": 10,
+    "w": 2,
+    "signed": false
+   },
+   {
+    "name": "EQ Mid Q",
+    "ae": 24,
+    "size": 65543,
+    "centre": 0,
+    "pos": 12,
+    "w": 1,
+    "signed": false
+   },
+   {
+    "name": "EQ Switch",
+    "ae": 26,
+    "size": 65536,
+    "centre": 0,
+    "pos": 13,
+    "w": 1,
+    "signed": false
+   }
+  ]
+ }
+}

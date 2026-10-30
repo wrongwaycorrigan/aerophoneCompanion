@@ -150,6 +150,8 @@ const label = (c, fallback) => ((c && c.label) || fallback || '').replace(/^-\s*
 const ENV_NAMES = {
   ptlAenv: { 0: 'Attack velocity sens', 2: 'Release velocity sens', 4: 'Attack', 8: 'Hold', 12: 'Decay', 16: 'Release', 20: 'Peak level', 24: 'Hold level', 28: 'Sustain level' },
   ptlFenv: { 0: 'Depth', 1: 'Velocity curve', 2: 'Velocity sens', 4: 'Attack velocity sens', 6: 'Release velocity sens', 8: 'Attack', 12: 'Hold', 16: 'Decay', 20: 'Release', 24: 'Start level', 28: 'Peak level', 32: 'Hold level', 36: 'Sustain level', 40: 'End level' },
+  ptlPenv: { 0: 'Depth', 2: 'Velocity sens', 4: 'Attack velocity sens', 6: 'Release velocity sens', 8: 'Attack', 12: 'Hold', 16: 'Decay', 20: 'Release', 24: 'Start level', 28: 'Peak level', 32: 'Hold level', 36: 'Sustain level', 40: 'End level', 44: 'Velocity curve' },
+  ptlEq: { 0: 'Low gain', 4: 'Mid gain', 8: 'High gain', 12: 'Low frequency', 16: 'Mid frequency', 20: 'High frequency', 24: 'Mid width (Q)', 26: 'EQ on' },
   part: { 1: 'Part on', 10: 'Use the tone’s own effect', 11: 'Through the insert effect' },
   as: { 0: 'Controls', 2: 'Input from', 3: 'Input to', 4: 'Output from', 5: 'Output to', 6: 'Mode', 7: 'Curve' },
 };
@@ -321,7 +323,8 @@ const state = {
 };
 const SCENE_BLOCKS = AM.root.find((e) => e.name === 'Temporary_Scene').child.map((c) => 'Temporary_Scene%' + c.name);
 const TONE_BLOCKS = ['common', 'mfx', 'pmt', 'ptl_1', 'ptl_2', 'ptl_3', 'ptl_4', 'ptlFenv_1', 'ptlFenv_2', 'ptlFenv_3', 'ptlFenv_4', 'ptlAenv_1', 'ptlAenv_2', 'ptlAenv_3', 'ptlAenv_4',
-  'ptlLfo_1', 'ptlLfo_2', 'ptlLfo_3', 'ptlLfo_4', 'synCom', 'synPtl_1', 'synPtl_2', 'synPtl_3', 'synPtl_4'];
+  'ptlLfo_1', 'ptlLfo_2', 'ptlLfo_3', 'ptlLfo_4', 'synCom', 'synPtl_1', 'synPtl_2', 'synPtl_3', 'synPtl_4',
+  'ptlPenv_1', 'ptlPenv_2', 'ptlPenv_3', 'ptlPenv_4', 'ptlEq_1', 'ptlEq_2', 'ptlEq_3', 'ptlEq_4'];
 const SP = (n) => 'Temporary_Scene%Perf_' + n;
 const TP = (part, n) => `Temporary_Tone_PCM_(${part})%PCMEX_${n}`;
 
@@ -597,7 +600,7 @@ function toggleSolo(n, i) {
   }
   renderMain(true);
 }
-const PARTIAL_BLOCKS = ['synPtl', 'ptl', 'ptlFenv', 'ptlAenv', 'ptlLfo'];
+const PARTIAL_BLOCKS = ['synPtl', 'ptl', 'ptlFenv', 'ptlAenv', 'ptlLfo', 'ptlPenv', 'ptlEq'];
 function addPartial(n, i) {                        // a new partial starts from partial 1's shaping, then you pick its wave
   unsolo();
   const from = [1, 2, 3, 4].find((j) => j !== i && raw(TP(n, 'pmt'), PSW(j)));
@@ -620,6 +623,52 @@ function removePartial(n, i) {
   toast(`Partial ${i} removed`, { label: 'Undo', run: () => { setVal(ptl, 32, keep.L); setVal(ptl, 36, keep.R); setVal(TP(n, 'pmt'), PSW(i), 1); state.partial = i; renderMain(); renderInspector(); } });
 }
 const toneBlocks = (n) => TONE_BLOCKS.map((b) => TP(n, b));
+// ---- save a tone to this computer as a ZENOLOGY user bank (slot 1; the other slots blank) ----
+const CRC_T = (() => { const t = new Uint32Array(256); for (let i = 0; i < 256; i++) { let c = i; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[i] = c >>> 0; } return t; })();
+const crc32 = (b) => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_T[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+function zenRecord(n, name) {
+  const Z = window.ZEN, r = new Uint8Array(Z.recSize);
+  for (const [i, b] of Z.blank) r[i] = b;
+  for (const [blk, [copies, stride, base, fields]] of Object.entries(Z.blocks)) {
+    for (let k = 0; k < copies; k++) {
+      const src = mem[TP(n, copies > 1 ? `${blk}_${k + 1}` : blk)]; if (!src) continue;
+      for (const [aeOff, size, centre, pos, w] of fields) {
+        const v = dec(src, aeOff, size) - centre, at = base + stride * k + pos;
+        for (let i = 0; i < w; i++) r[at + i] = (v >> (8 * i)) & 255;
+      }
+    }
+  }
+  const t = (name || 'Tone').slice(0, 16).padEnd(16);
+  for (let i = 0; i < 16; i++) { const c = t.charCodeAt(i); r[0x10 + i] = c >= 32 && c < 127 ? c : 32; }
+  return r;
+}
+async function saveToneForZenology(n) {
+  if (!window.ZEN || !window.CompressionStream) { toast('This browser can’t write ZENOLOGY files'); return; }
+  for (const p of toneBlocks(n)) if (!mem[p]) await readBlock(p);
+  const Z = window.ZEN, name = (state.toneNameDraft[n] ?? currentToneName(n)).trim() || 'Tone';
+  const rec = zenRecord(n, name), blank = new Uint8Array(Z.recSize); for (const [i, b] of Z.blank) blank[i] = b;
+  const raw = new Uint8Array(0x20 + Z.recSize * Z.count); raw.set(Z.svd, 0);
+  for (let i = 0; i < Z.count; i++) raw.set(i ? blank : rec, 0x20 + i * Z.recSize);
+  const z = new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer());
+  const head = new Uint8Array(Z.head), dv = new DataView(head.buffer);
+  dv.setUint32(0x1c, 0x40 + z.length, true); dv.setUint32(0x38, 0x20 + z.length, true);
+  dv.setUint32(0x3c, crc32(z), true); dv.setUint32(0x48, raw.length, true);
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([head, z], { type: 'application/octet-stream' }));
+  a.download = `${name.replace(/[^\w.-]+/g, '_')}.bin`; a.click();
+  toast(`Saved ${name} for ZENOLOGY. In ZENOLOGY: Write › Import`);
+}
+// Ctrl/Cmd+Shift+E in Tones: save this part's tone exactly as the instrument holds it (for comparing with other ZEN-Core software)
+function exportToneData(n) {
+  const blocks = {}; for (const b of TONE_BLOCKS) { const p = TP(n, b); if (mem[p]) blocks[b] = Array.from(mem[p]).map(hexb).join(' '); }
+  if (!Object.keys(blocks).length) { toast('Open a ZEN-Core tone first'); return; }
+  const pp = SP('part_' + n), name = currentToneName(n) || 'tone';
+  const o = { app: 'Aerophone Companion', version: (window.AE_VERSION || {}).version, tone: name, bank: [2, 3, 4].map((x) => raw(pp, x)), part: n, blocks };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(o, null, 1)], { type: 'application/json' }));
+  a.download = `${name.replace(/[^\w.-]+/g, '_')}.tone.json`; a.click();
+  toast(`Saved ${name} tone data`);
+}
 function toneSnap(n) { const o = {}; for (const p of toneBlocks(n)) if (mem[p]) o[p] = mem[p].slice(); return o; }
 function toneDirty(n) {
   const b = state.toneBase[n]; if (!b) return false;
@@ -678,6 +727,7 @@ function toneBarHTML(n) {
     <span class="tstate">${dirty ? `<span class="drafttxt">${ICON.draft}Draft</span>` : userToneIdx(n) >= 0 ? 'Your tone' : 'Preset tone'}</span>
     <input id="tname" maxlength="${TONE_NAME_LEN}" value="${esc(state.toneNameDraft[n] ?? currentToneName(n))}" title="Tone name" aria-label="Tone name">
     <select class="slot" id="tslot" title="User tone slot on the AE-20">${userToneOptions(idx)}</select>
+    <button class="ib" id="tzen" title="Save this tone to this computer as a ZENOLOGY bank file">${ICON.computer}</button>
     <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the AE-20${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}</button>
   </div>`;
 }
@@ -685,6 +735,7 @@ function bindToneBar(n) {
   const sel = $('#tslot'), nm = $('#tname'); if (!sel) return;
   if (!state.userTones) fetchUserTones();
   $('#tnew').onclick = () => newTone(n);
+  $('#tzen').onclick = () => saveToneForZenology(n);
   sel.onchange = () => { state.toneTarget[n] = +sel.value; renderMain(true); };
   nm.onkeydown = (e) => { if (e.key === 'Enter') nm.blur(); e.stopPropagation(); };
   nm.oninput = () => { state.toneNameDraft[n] = nm.value; };
@@ -899,6 +950,7 @@ const PIN_DEFAULTS = {
   osc: ['Temporary_Tone_PCM%PCMEX_synPtl_N%1', 'Temporary_Tone_PCM%PCMEX_synPtl_N%6', 'Temporary_Tone_PCM%PCMEX_synPtl_N%7'],
   filter: ['Temporary_Tone_PCM%PCMEX_ptl_N%50', 'Temporary_Tone_PCM%PCMEX_ptl_N%61', 'Temporary_Tone_PCM%PCMEX_ptlFenv_N%0'],
   amp: ['Temporary_Tone_PCM%PCMEX_ptlAenv_N%4', 'Temporary_Tone_PCM%PCMEX_ptlAenv_N%16', 'Temporary_Tone_PCM%PCMEX_ptlAenv_N%28'],
+  eq: ['Temporary_Tone_PCM%PCMEX_ptlEq_N%0', 'Temporary_Tone_PCM%PCMEX_ptlEq_N%4', 'Temporary_Tone_PCM%PCMEX_ptlEq_N%8'],
   lfo: ['Temporary_Tone_PCM%PCMEX_ptlLfo_N%0', 'Temporary_Tone_PCM%PCMEX_ptlLfo_N%4', 'Temporary_Tone_PCM%PCMEX_ptlLfo_N%23'],
 };
 function pinsFor(type) { return LS.get('pins:' + type, null) || PIN_DEFAULTS[type] || null; }
@@ -986,6 +1038,8 @@ function canvasShell(inner, w, h) {
 }
 const ICON = {
   heart: `<svg class="g" viewBox="-12 -12 24 24"><path d="${'M0 9C-1.6 7.4-9.5 2.6-9.5-3.2-9.5-6.6-6.9-9-4-9-2.2-9-.8-8-0-6.6 .8-8 2.2-9 4-9 6.9-9 9.5-6.6 9.5-3.2 9.5 2.6 1.6 7.4 0 9z'}"/></svg>`,
+  library: '<svg class="g" viewBox="0 0 24 24"><path d="M4 20.5h16"/><rect x="5" y="5" width="3.5" height="15.5" rx=".6"/><rect x="9.5" y="7.5" width="3.5" height="13" rx=".6"/><path d="M14.6 8.6l3.2-.9 3.2 11.9-3.2.9z"/></svg>',
+  computer: '<svg class="g" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12.5" rx="1.6"/><path d="M9 20.5h6M12 16.5v4"/><path d="M12 7.5v5.5M9.6 10.8l2.4 2.4 2.4-2.4"/></svg>',
   disk: '<svg class="g" viewBox="0 0 24 24"><path d="M5 3h11l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 1-2z"/><path d="M8 3v5h7V3"/><rect x="7.5" y="13" width="9" height="6" rx="1"/></svg>',
   upload: '<svg class="g" viewBox="0 0 24 24"><path d="M12 15V4.5M7.5 9L12 4.5L16.5 9"/><path d="M4.5 13.5v5.5h15v-5.5"/></svg>',
   download: '<svg class="g" viewBox="0 0 24 24"><path d="M12 4.5V15M7.5 10.5L12 15L16.5 10.5"/><path d="M4.5 13.5v5.5h15v-5.5"/></svg>',
@@ -1013,7 +1067,7 @@ function titleHTML() {
     <button class="step" id="next" title="Next scene">&#8250;</button>
   </div>
   <div class="acts">
-    <button class="ib ${dirty ? 'want' : ''}" id="save" title="Save to Library">${ICON.disk}</button>
+    <button class="ib ${dirty ? 'want' : ''}" id="save" title="Save to Library">${ICON.library}</button>
     <button class="ib hold ${dirty ? 'want' : ''}" id="upload" title="Hold to upload to the AE-20">${RING}${ICON.upload}</button>
     <select class="slot" id="wslot" title="User slot on the AE-20">${slotOptions(uploadTarget())}</select><span class="sep"></span>
     <button class="ib" id="revert" title="Revert to saved" ${dirty ? '' : 'disabled'}>${ICON.revert}</button>
@@ -1297,6 +1351,7 @@ function renderTones(soft) {
   if (!mem[TP(n, 'synPtl_1')]) { canvasShell('', 1400, 700); outsideBars(partsBar + '<div class="note" style="position:absolute;left:32px;top:146px;max-width:520px;z-index:3">Reading the tone…</div>'); bindParts(); loadTone(n); return; }
   const P = state.partial, ctx = { n: P, tonePart: n };
   const syn = TP(n, 'synPtl_' + P), ptl = TP(n, 'ptl_' + P), lfo = TP(n, 'ptlLfo_' + P), aenv = TP(n, 'ptlAenv_' + P), fenv = TP(n, 'ptlFenv_' + P), sc = TP(n, 'synCom');
+  const penv = TP(n, 'ptlPenv_' + P), peq = TP(n, 'ptlEq_' + P);
   const pmt = TP(n, 'pmt');
   const partialOn = (i) => partialIsOn(n, i), solo = state.solo && state.solo.part === n ? state.solo.p : 0;
   const onCount = [1, 2, 3, 4].filter(partialOn).length;
@@ -1316,26 +1371,32 @@ function renderTones(soft) {
   const uni = raw(sc, 0);
   const Y = 290;
   defs.osc = { id: 'osc', type: 'osc', title: 'Oscillator', ctx };
-  html += nodeHTML('osc', 300, Y, '', 'Oscillator', esc(oscName + (uni ? `, unison ${display(sc, 1)}` : '')), miniRows(pinsFor(oscType === 0 ? 'pcm' : 'osc'), ctx), '<div class="port in air"></div><div class="port out"></div>');
+  html += nodeHTML('osc', 290, Y, '', 'Oscillator', esc(oscName + (uni ? `, unison ${display(sc, 1)}` : '')), miniRows(pinsFor(oscType === 0 ? 'pcm' : 'osc'), ctx), '<div class="port in air"></div><div class="port out"></div>');
   defs.filter = { id: 'filter', type: 'filter', title: 'Filter', ctx };
-  html += nodeHTML('filter', 590, Y, '', 'Filter', esc(display(ptl, 49)), miniRows(pinsFor('filter'), ctx), '<div class="port in"></div><div class="port out"></div>');
+  html += nodeHTML('filter', 550, Y, '', 'Filter', esc(display(ptl, 49)), miniRows(pinsFor('filter'), ctx), '<div class="port in"></div><div class="port out"></div>');
   defs.amp = { id: 'amp', type: 'amp', title: 'Amp', ctx };
-  html += nodeHTML('amp', 880, Y, '', 'Amp', 'Envelope and level', miniRows(pinsFor('amp'), ctx), '<div class="port in"></div><div class="port out"></div>');
+  html += nodeHTML('amp', 810, Y, '', 'Amp', 'Envelope and level', miniRows(pinsFor('amp'), ctx), '<div class="port in"></div><div class="port out"></div>');
+  defs.eq = { id: 'eq', type: 'eq', title: 'EQ', ctx };
+  const eqOn = mem[peq] && raw(peq, 26);
+  html += nodeHTML('eq', 1070, Y, eqOn ? '' : 'off', 'EQ', eqOn ? 'Low, mid and high' : 'Off', miniRows(pinsFor('eq'), ctx), '<div class="port in"></div><div class="port out"></div>');
   defs.toneout = { id: 'toneout', type: 'toneout', title: 'Tone output', ctx };
   const tl = raw(TP(n, 'common'), 21);
-  html += nodeHTML('toneout', 1170, Y, '', 'Tone output', esc(fxName('MFX', raw(TP(n, 'mfx'), 0)) + ' effect'), `<div class="mini"><label>Level</label><div class="bar"><i style="width:${(tl / 127 * 100).toFixed(0)}%"></i></div><output>${tl}</output></div>`, '<div class="port in"></div>');
+  html += nodeHTML('toneout', 1330, Y, '', 'Tone output', esc(fxName('MFX', raw(TP(n, 'mfx'), 0)) + ' effect'), `<div class="mini"><label>Level</label><div class="bar"><i style="width:${(tl / 127 * 100).toFixed(0)}%"></i></div><output>${tl}</output></div>`, '<div class="port in"></div>');
   defs.lfo = { id: 'lfo', type: 'lfo', title: 'LFO 1', ctx };
-  html += nodeHTML('lfo', 300, Y + 260, '', 'LFO 1', esc(display(lfo, 0) + (raw(lfo, 1) ? `, ${display(lfo, 2)}` : '')), miniRows(pinsFor('lfo'), ctx), '');
+  html += nodeHTML('lfo', 290, Y + 260, '', 'LFO 1', esc(display(lfo, 0) + (raw(lfo, 1) ? `, ${display(lfo, 2)}` : '')), miniRows(pinsFor('lfo'), ctx), '');
   defs.fenv = { id: 'fenv', type: 'fenv', title: 'Filter envelope', ctx };
-  html += nodeHTML('fenv', 590, Y + 300, '', 'Filter envelope', esc(`Depth ${display(fenv, 0)}`), '', '');
+  html += nodeHTML('fenv', 550, Y + 300, '', 'Filter envelope', esc(`Depth ${display(fenv, 0)}`), '', '');
+  defs.penv = { id: 'penv', type: 'penv', title: 'Pitch envelope', ctx };
+  html += nodeHTML('penv', 32, Y + 300, '', 'Pitch envelope', mem[penv] ? esc(`Depth ${display(penv, 0)}`) : '', '', '');
   defs.breath = { id: 'breath', type: 'assign', blk: SP('as_breath_1'), title: 'Breath', slots: 4 };
   html += nodeHTML('breath', 32, Y, '', 'Breath <span class="bmini"><i></i></span>', 'Shapes volume and tone', '', '<div class="port out air"></div>');
-  const links = [['breath', 'osc', 'air'], ['osc', 'filter', 'audio'], ['filter', 'amp', 'audio'], ['amp', 'toneout', 'audio']];
+  const links = [['breath', 'osc', 'air'], ['osc', 'filter', 'audio'], ['filter', 'amp', 'audio'], ['amp', 'eq', eqOn ? 'audio' : 'off'], ['eq', 'toneout', 'audio']];
   if (val(lfo, 23) || val(syn, 7)) links.push(['lfo', 'osc', 'mod']);
   if (val(lfo, 25)) links.push(['lfo', 'filter', 'mod']);
   if (val(lfo, 27)) links.push(['lfo', 'amp', 'mod']);
   if (val(fenv, 0)) links.push(['fenv', 'filter', 'mod']);
-  canvasShell(html, 1440, 900); outsideBars(partsBar + partials + toneBar);
+  if (mem[penv] && val(penv, 0)) links.push(['penv', 'osc', 'mod']);
+  canvasShell(html, 1580, 900); outsideBars(partsBar + partials + toneBar);
   drawCables(links);
   bindNodes(defs); bindParts(); bindToneBar(n);
   state.defs = defs;
@@ -1397,7 +1458,7 @@ function bindMaps(el) {
 }
 
 // ---- envelopes: a small drawing; the stage you point at or change lights up ----
-const ENV = { amp: { t: [4, 8, 12, 16], l: [null, 20, 24, 28, null] }, fenv: { t: [8, 12, 16, 20], l: [24, 28, 32, 36, 40] } };
+const ENV = { amp: { t: [4, 8, 12, 16], l: [null, 20, 24, 28, null] }, fenv: { t: [8, 12, 16, 20], l: [24, 28, 32, 36, 40] }, penv: { t: [8, 12, 16, 20], l: [24, 28, 32, 36, 40] } };
 function envPoints(path, kind) {
   const E = ENV[kind], H = 96, pad = 8, seg = (300 - 2 * pad - 40) / 4;
   const nv = (o) => { const [mn, mx] = range(path, o); return (val(path, o) - mn) / ((mx - mn) || 1); };
@@ -1408,8 +1469,8 @@ function envPoints(path, kind) {
 }
 function envSVG(path, kind) {
   if (!mem[path]) return '';
-  const p = envPoints(path, kind), segs = ['t1', 't2', 't3', 'sus', 't4'];
-  return `<svg class="env" data-env-of="${esc(path)}" data-kind="${kind}" viewBox="0 0 300 96"><path class="ef" d="M${p[0][0]} 88 ${p.map((q) => 'L' + q.join(' ')).join(' ')} L${p[5][0]} 88Z"/>
+  const p = envPoints(path, kind), segs = ['t1', 't2', 't3', 'sus', 't4'], y0 = kind === 'penv' ? 48 : 88;   // pitch moves either side of the note played
+  return `<svg class="env" data-env-of="${esc(path)}" data-kind="${kind}" viewBox="0 0 300 96">${kind === 'penv' ? '<line class="emid" x1="8" x2="292" y1="48" y2="48"/>' : ''}<path class="ef" d="M${p[0][0]} ${y0} ${p.map((q) => 'L' + q.join(' ')).join(' ')} L${p[5][0]} ${y0}Z"/>
     ${p.slice(0, 5).map((q, i) => `<path class="es ${segs[i]}" d="M${q.join(' ')} L${p[i + 1].join(' ')}"/>`).join('')}
     ${p.map((q, i) => i === 4 ? '' : `<circle class="ep l${i > 4 ? i - 1 : i}" cx="${q[0]}" cy="${q[1]}" r="3.5"/>`).join('')}</svg>`;
 }
@@ -1435,6 +1496,10 @@ function control(path, off, fx, pinType, name, attrs = '') {
     return `<div class="prm" ${attrs}>${pinBtn}<span class="pn">${nm}</span><span></span><select class="sel ctl" ${data}>${c.options.map((o, i) => `<option value="${i}" ${i === v ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select></div>`;
   }
   if (mx - mn === 1 && (!c0 || c.kind === 'Switch' || c.kind === 'Other')) return `<div class="prm" ${attrs}>${pinBtn}<span class="pn">${nm}</span><button class="tog ${v ? 'on' : ''}" ${data} data-toggle="1"></button></div>`;
+  if (c.format && c.format.includes(' Hz') && mn > 0 && mx / mn >= 100) {           // frequencies: even steps per octave
+    const lv = Math.round(1000 * Math.log(v / mn) / Math.log(mx / mn));
+    return `<div class="prm" ${attrs}>${pinBtn}<span class="pn">${nm}</span><span class="pv">${esc(display(path, off, fx))}</span><input type="range" class="ctl" min="0" max="1000" value="${lv}" style="--p:${lv / 10}%" data-log="${mn},${mx}" ${data}></div>`;
+  }
   const pct = mx > mn ? ((v - mn) / (mx - mn)) * 100 : 0;
   return `<div class="prm" ${attrs}>${pinBtn}<span class="pn">${nm}</span><span class="pv">${esc(display(path, off, fx))}</span><input type="range" class="ctl" min="${mn}" max="${mx}" value="${v}" style="--p:${pct}%" ${data}></div>`;
 }
@@ -1521,6 +1586,19 @@ function renderInspector() {
     h += `<h2>Filter envelope</h2><p class="lead">Envelope: a shape over each note (attack, decay, sustain, release). This one moves the filter cutoff.</p>`;
     h += section('', [0, 1, 2].map((o) => control(fe, o, null)));
     h += `<section><h4>Shape</h4>${envSVG(fe, 'fenv')}${envControls(fe, 'fenv')}</section>`;
+  } else if (s.type === 'penv') {
+    const { n, tonePart } = s.ctx; const pe = TP(tonePart, 'ptlPenv_' + n);
+    h += `<h2>Pitch envelope</h2><p class="lead">Pitch envelope: bends the pitch over each note, for a scoop up, a fall-off or a synth zap. Depth sets how far.</p>`;
+    h += section('', [0, 2, 44].map((o) => control(pe, o, null)));
+    h += `<section><h4>Shape</h4>${envSVG(pe, 'penv')}${envControls(pe, 'penv')}</section>`;
+    h += `<details class="more"><summary>More settings</summary>${[4, 6].map((o) => control(pe, o, null)).join('')}</details>`;
+  } else if (s.type === 'eq') {
+    const { n, tonePart } = s.ctx; const q = TP(tonePart, 'ptlEq_' + n);
+    h += `<h2>EQ</h2><p class="lead">EQ: boosts or cuts the low, mid and high frequencies of partial ${n}.</p>`;
+    h += section('', [control(q, 26, null)]);
+    h += section('Low', [0, 12].map((o) => control(q, o, null, 'eq')));
+    h += section('Mid', [4, 16, 24].map((o) => control(q, o, null, 'eq')));
+    h += section('High', [8, 20].map((o) => control(q, o, null, 'eq')));
   } else if (s.type === 'amp') {
     const { n, tonePart } = s.ctx; const ae = TP(tonePart, 'ptlAenv_' + n), ptl = TP(tonePart, 'ptl_' + n);
     h += `<h2>Amp</h2><p class="lead">Amp: the partial’s volume over each note, set by its envelope. Your breath adds to it as you play.</p>`;
@@ -1550,7 +1628,8 @@ function bindInspector() {
     const t = e.target; if (!t.dataset.path) return;
     const er = t.closest('[data-env]');
     if (er) setTimeout(() => { const sv = el.querySelector(`svg.env[data-env-of="${t.dataset.path}"]`); if (sv) { sv.outerHTML = envSVG(t.dataset.path, sv.dataset.kind); lightEnv(er.dataset.env); } });
-    setVal(t.dataset.path, +t.dataset.off, +t.value, t.dataset.fx === '' ? null : t.dataset.fx);
+    const lg = t.dataset.log && t.dataset.log.split(',').map(Number);
+    setVal(t.dataset.path, +t.dataset.off, lg ? Math.round(lg[0] * (lg[1] / lg[0]) ** (t.value / 1000)) : +t.value, t.dataset.fx === '' ? null : t.dataset.fx);
     if (t.type === 'range') {
       const [mn, mx] = [+t.min, +t.max]; t.style.setProperty('--p', ((t.value - mn) / (mx - mn) * 100) + '%');
       const out = t.parentElement.querySelector('.pv'); if (out) out.textContent = display(t.dataset.path, +t.dataset.off, t.dataset.fx === '' ? null : t.dataset.fx);
@@ -1694,7 +1773,7 @@ function guard(action) {
   const v = document.createElement('div'); v.className = 'panelveil';
   const t = uploadTarget();
   v.innerHTML = `<div class="panel" role="dialog" aria-modal="true"><h2>Keep your edits to ${esc(sceneName())}?</h2><p>You changed this scene. Choose what to do before moving on.</p>
-    <button class="choice primary" data-c="save">${ICON.disk}<div><b>Save to Library</b><span>${state.entry ? 'Updates it in ' + esc((state.libs.find((l) => l.id === state.entry.lib) || {}).name || 'the Library') : 'Adds it to My scenes on this computer'}</span></div></button>
+    <button class="choice primary" data-c="save">${ICON.library}<div><b>Save to Library</b><span>${state.entry ? 'Updates it in ' + esc((state.libs.find((l) => l.id === state.entry.lib) || {}).name || 'the Library') : 'Adds it to My scenes on this computer'}</span></div></button>
     <button class="choice" data-c="upload"><div class="fill"></div>${ICON.upload}<div><b>Hold to upload to the AE-20</b><span>Overwrites user slot U${pad2(t.lsb + 1)}-${pad2(t.pc + 1)}</span></div></button>
     <button class="choice" data-c="discard">${ICON.discard}<div><b>Discard edits</b><span>Go back to the saved sound</span></div></button>
     <button class="stay">Keep editing</button></div>`;
@@ -2528,6 +2607,7 @@ $('#theme').onclick = () => {
 let spaceDown = false;
 addEventListener('keydown', (e) => {
   const typing = /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
+  if (state.view === 'tones' && e.shiftKey && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') { e.preventDefault(); exportToneData(state.tonePart); return; }
   if (state.view === 'favorites' && !typing) {
     if (e.key === '/' || (e.key === 'f' && (e.ctrlKey || e.metaKey))) { const q = $('#lq'); if (q) { e.preventDefault(); q.focus(); return; } }
     if (e.key === 'Tab' && !state.favSave) { nextMode(e.shiftKey ? -1 : 1); return e.preventDefault(); }
@@ -2569,5 +2649,5 @@ applyTheme();
 if (window.AE_VERSION) $('#ver').textContent = `v${AE_VERSION.version} · ${AE_VERSION.build}`;
 if (!navigator.requestMIDIAccess) { status('', 'No Web MIDI'); $('#main').innerHTML = '<div class="connect"><div class="card"><h2>Use Chrome or Edge</h2><p>This browser can’t talk to MIDI devices. Open the editor in Chrome or Edge.</p></div></div>'; document.body.classList.add('noinsp'); }
 else loadLibs().then(connect);
-window.__app = { waveOf, setWave, waveBrowser, newTone, saveTone, toneDirty, tonesDirty, fetchUserTones, setTone, setFxType, lists, refreshMode, favorites, air, knobSet, knobDefs, colorState, setMode, catStep, state, mem, block, dev, raw, val, setVal, readBlock, selectScene, switchFavorite, SP, TP, isDirty, toParamSet, audition, LIB };   // for testing
+window.__app = { zenRecord, saveToneForZenology, waveOf, setWave, waveBrowser, newTone, saveTone, toneDirty, tonesDirty, fetchUserTones, setTone, setFxType, lists, refreshMode, favorites, air, knobSet, knobDefs, colorState, setMode, catStep, state, mem, block, dev, raw, val, setVal, readBlock, selectScene, switchFavorite, SP, TP, isDirty, toParamSet, audition, LIB };   // for testing
 })();

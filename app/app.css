@@ -383,6 +383,7 @@ svg.curve.cstep:hover path.l{stroke:var(--brass)}
 /* envelope drawing */
 svg.env{width:100%;height:auto;display:block;margin:2px 0 14px;background:var(--mist);border-radius:10px}
 svg.env .ef{fill:var(--air-soft);opacity:.6}
+svg.env .emid{stroke:var(--rule);stroke-dasharray:3 4}
 svg.env .es{fill:none;stroke:var(--air);stroke-width:2;stroke-linecap:round;transition:stroke-width .1s}
 svg.env .es.sus{stroke-dasharray:3 4}
 svg.env .es.on{stroke:var(--brass);stroke-width:4}

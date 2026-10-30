@@ -33,6 +33,10 @@ FIRST TIME
 
    Mac      Right-click "Start Aerophone Companion (Mac).command" > Open.
             Needs python3.
+            If macOS still won't open it, open Terminal and run these two
+            commands, dragging the script onto the window after each:
+              xattr -d com.apple.quarantine 
+              chmod +x 
 
    A small server window opens, then Aerophone Companion in its own browser
    window. Keep the server window open while you play; close it when you're
@@ -71,7 +75,8 @@ TONES
   revealed visually, and every partial shows the name of the wave it plays.
   Browse and search all 1,980 built-in waves, add or remove partials, solo one
   to hear it on its own, or start a New tone from scratch. Save an edited tone
-  to one of the 512 user tone slots and the scene's part plays it.
+  to one of the 512 user tone slots, or save it to your computer as a ZENOLOGY
+  bank file (the disk icon) to keep shaping it in Roland's ZENOLOGY plug-in.
 
 LIBRARY
   Your AE-20's sound vault. Import, export, organise and back up every scene,
@@ -83,7 +88,7 @@ NOTES
 -----
 
 - The small text next to the name is the version and build code (for example
-  v0.12.0 · 83b7ad6). Mention it when reporting a problem.
+  v0.14.0 · 5d1212b). Mention it when reporting a problem.
 - Your Library is stored in this browser at http://localhost:8642. Export what
   you want to keep as files.
 - The status light top right shows when the AE-20 is unplugged or off; click
