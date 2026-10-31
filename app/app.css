@@ -563,3 +563,4 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .ib.want .iblbl{color:var(--brass)}
 .iblbl{top:50%;left:auto;right:100%;transform:translateY(-50%);margin:0 7px 0 0;font-size:12px}
 #tsave,#upload{margin-left:44px}
+#save{margin-left:52px}
