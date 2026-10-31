@@ -559,3 +559,7 @@ svg.map .mv{text-anchor:middle;fill:var(--ink);font-weight:600}
 .plist button.muted{opacity:.55}
 .plist button{max-width:none}
 .plist .pnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.iblbl{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;font-size:11px;font-weight:500;color:var(--slate);white-space:nowrap;pointer-events:none}
+.ib.want .iblbl{color:var(--brass)}
+.iblbl{top:50%;left:auto;right:100%;transform:translateY(-50%);margin:0 7px 0 0;font-size:12px}
+#tsave,#upload{margin-left:44px}

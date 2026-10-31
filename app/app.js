@@ -728,7 +728,7 @@ function toneBarHTML(n) {
     <input id="tname" maxlength="${TONE_NAME_LEN}" value="${esc(state.toneNameDraft[n] ?? currentToneName(n))}" title="Tone name" aria-label="Tone name">
     <select class="slot" id="tslot" title="User tone slot on the AE-20">${userToneOptions(idx)}</select>
     <button class="ib" id="tzen" title="Save this tone to this computer as a ZENOLOGY bank file">${ICON.computer}</button>
-    <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the AE-20${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}</button>
+    <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the AE-20${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}<span class="iblbl">Tone</span></button>
   </div>`;
 }
 function bindToneBar(n) {
@@ -1068,7 +1068,7 @@ function titleHTML() {
   </div>
   <div class="acts">
     <button class="ib ${dirty ? 'want' : ''}" id="save" title="Save to Library">${ICON.library}</button>
-    <button class="ib hold ${dirty ? 'want' : ''}" id="upload" title="Hold to upload to the AE-20">${RING}${ICON.upload}</button>
+    <button class="ib hold ${dirty ? 'want' : ''}" id="upload" title="Hold to upload this scene to the AE-20">${RING}${ICON.upload}<span class="iblbl">Scene</span></button>
     <select class="slot" id="wslot" title="User slot on the AE-20">${slotOptions(uploadTarget())}</select><span class="sep"></span>
     <button class="ib" id="revert" title="Revert to saved" ${dirty ? '' : 'disabled'}>${ICON.revert}</button>
   </div>`;

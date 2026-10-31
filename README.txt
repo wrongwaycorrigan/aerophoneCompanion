@@ -114,7 +114,7 @@ TROUBLESHOOTING
 - Where your Library lives: in the browser at http://localhost:8642. Export
   anything you want to keep as files.
 - Reporting a problem: include the version and build code shown next to the
-  app's name (for example v0.14.0 · 5d1212b).
+  app's name (for example v0.14.1 · 09c89b9).
 
 
 WHAT'S INSIDE
