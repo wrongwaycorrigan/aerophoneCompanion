@@ -168,6 +168,8 @@ const short = (t) => (t.match(/^(?:Time|Level)\d \((\w+)\)$/) || [])[1] || t.rep
 
 // ======================= device (Web MIDI + Roland SysEx) =======================
 const HDR = [0xF0, 0x41, 0x10, 0x00, 0x00, 0x00, 0x7D];
+// the instrument's USB MIDI name: AE-20 or AE-30 (Aerophone Pro), however the computer spells it ("AE-30", "Aerophone Pro", "2- AE-20")
+const AE_NAME = /\b(AE[- ]?20|AE[- ]?30|Aerophone[- ]?Pro|GC011)/i;
 const chk = (a) => (128 - (a.reduce((s, x) => s + x, 0) % 128)) & 127;
 const dev = {
   access: null, input: null, output: null, queue: [], busyUntil: 0, timer: null, waiters: [], onDT1: [],
@@ -184,7 +186,7 @@ const dev = {
   },
   pick(name) {
     const { ins, outs } = this.ports();
-    const want = name || [...outs.map((p) => this.normName(p.name))].find((n) => /^(AE-20|AE-30|GC011)/.test(n));
+    const want = name || [...outs.map((p) => this.normName(p.name))].find((n) => AE_NAME.test(n));
     if (!want) return false;
     const rank = (p) => (p.name.trim() === this.normName(p.name) ? 0 : 1);
     this.input = ins.filter((p) => this.normName(p.name) === want).sort((a, b) => rank(a) - rank(b))[0];
@@ -403,7 +405,7 @@ async function connect(portName) {
       dev.access.onstatechange = (e) => {
         const p = e.port;
         if (state.connected) { if ((p === dev.output || p === dev.input) && p.state === 'disconnected') lostConnection('AE-20 unplugged or off'); }
-        else if (p.state === 'connected' && /^(AE-20|AE-30|GC011)/.test(dev.normName(p.name))) { clearTimeout(autoT); autoT = setTimeout(() => { if (!state.connected && !connecting) connect(); }, 1500); }
+        else if (p.state === 'connected' && AE_NAME.test(dev.normName(p.name))) { clearTimeout(autoT); autoT = setTimeout(() => { if (!state.connected && !connecting) connect(); }, 1500); }
       };
     }
     if (!dev.pick(portName)) { status('', 'Not connected'); state.connected = false; renderConnect(); return; }
@@ -638,6 +640,22 @@ function zenRecord(n, name) {
       }
     }
   }
+  // Matrix and MFX control sources can say SYS-CTRL1-4 (97-100): "the instrument's own controller slot 1-4".
+  // ZENOLOGY fills those slots from its own settings, so write the controller the AE-20 actually uses (OFF, CC01-95, BEND, AFT)
+  const sysSrc = (k) => {
+    const sc = mem['System%Sys_common'], byScene = sc && raw('System%Sys_common', 69) === 1;
+    if (byScene && mem[SP('common')]) return raw(SP('common'), 28 + k);
+    return sc ? raw('System%Sys_common', 73 + k) : null;
+  };
+  for (const [blk, offs] of [['ptl', [86, 95, 104, 113]], ['mfx', [4, 6, 8, 10]]]) {
+    const [copies, stride, base, fields] = Z.blocks[blk] || [];
+    if (!fields) continue;
+    for (let k = 0; k < copies; k++) for (const [aeOff, , , pos] of fields) {
+      if (!offs.includes(aeOff)) continue;
+      const at = base + stride * k + pos, v = r[at];
+      if (v >= 97 && v <= 100) { const real = sysSrc(v - 97); if (real != null) r[at] = real; }
+    }
+  }
   const t = (name || 'Tone').slice(0, 16).padEnd(16);
   for (let i = 0; i < 16; i++) { const c = t.charCodeAt(i); r[0x10 + i] = c >= 32 && c < 127 ? c : 32; }
   return r;
@@ -645,6 +663,7 @@ function zenRecord(n, name) {
 async function saveToneForZenology(n) {
   if (!window.ZEN || !window.CompressionStream) { toast('This browser can’t write ZENOLOGY files'); return; }
   for (const p of toneBlocks(n)) if (!mem[p]) await readBlock(p);
+  await readBlock('System%Sys_common');            // which controllers SYS-CTRL1-4 stand for on this AE-20
   const Z = window.ZEN, name = (state.toneNameDraft[n] ?? currentToneName(n)).trim() || 'Tone';
   const rec = zenRecord(n, name), blank = new Uint8Array(Z.recSize); for (const [i, b] of Z.blank) blank[i] = b;
   const raw = new Uint8Array(0x20 + Z.recSize * Z.count); raw.set(Z.svd, 0);
@@ -993,7 +1012,7 @@ function renderConnect(err) {
   let opts = '', found = false;
   if (dev.access) {
     const names = [...new Set(dev.ports().outs.map((p) => dev.normName(p.name)))];
-    const ae = names.filter((n) => /^(AE-20|AE-30|GC011)/.test(n)); found = ae.length > 0;
+    const ae = names.filter((n) => AE_NAME.test(n)); found = ae.length > 0;
     if (ae.length > 1) opts = `<select class="sel" id="portsel">${ae.map((n) => `<option>${esc(n)}</option>`).join('')}</select>`;
     else if (ae.length === 1) opts = `<input type="hidden" id="portsel" value="${esc(ae[0])}">`;
     else if (names.length) opts = `<details class="more"><summary>Use another MIDI device</summary><select class="sel" id="portsel">${names.map((n) => `<option>${esc(n)}</option>`).join('')}</select></details>`;
@@ -1002,7 +1021,7 @@ function renderConnect(err) {
   $('#main').innerHTML = `<div class="connect"><div class="ccard">
     <h2>${state.lost ? 'The AE-20 isn’t answering' : 'Connect your Aerophone'}</h2>
     <p>${state.lost && !blocked ? 'It was turned off or unplugged. Turn it on or plug it back in and it reconnects by itself, or click Connect. Your unsaved edits are still here.' : blocked ? 'MIDI access was blocked. Allow MIDI devices for this page in the browser’s site settings, then try again.'
-      : dev.access && !found ? 'No AE-20 found. Turn it on and plug it in with a USB cable. If it still doesn’t appear, install Roland’s AE-20 USB driver.' : dev.access ? 'Your AE-20 is plugged in.' : 'Plug the AE-20 in with a USB cable and turn it on.'}</p>
+      : dev.access && !found ? 'No AE-20 or AE-30 found. Turn it on and plug it in with a USB cable. If it still doesn’t appear, install Roland’s USB driver for your Aerophone.' : dev.access ? 'Your AE-20 is plugged in.' : 'Plug the AE-20 in with a USB cable and turn it on.'}</p>
     ${opts}
     <button class="btn primary" id="go">Connect</button></div></div>`;
   $('#go').onclick = () => { const ps = $('#portsel'); connect(ps && (ps.type === 'hidden' || ps.closest('details[open]') || ps.tagName === 'SELECT' && !ps.closest('details')) ? ps.value : undefined); };
