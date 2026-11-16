@@ -1,6 +1,6 @@
-// Aerophone Companion: scenes, tones, Live and Library for the Roland AE-20.
-// Talks to an AE-20 / AE-30 over USB with Web MIDI. The instrument's parameter map, value sizes,
-// effect lists and names come from data.js, built by tools/docs/build_data.py from Roland's public AE-30/AE-20 documents.
+// Aerophone Companion: scenes, tones, Live and Library for the Roland Aerophone AE-20 and Aerophone Pro AE-30.
+// Talks to an AE-20 or AE-30 over USB with Web MIDI. The instrument's parameter map, value sizes,
+// effect lists and names come from data.js, built by tools/build_data.py from Roland's public AE-30/AE-20 documents.
 (() => {
 'use strict';
 const D = window.AE_DATA, CAT = D.catalog;
@@ -168,7 +168,7 @@ const short = (t) => (t.match(/^(?:Time|Level)\d \((\w+)\)$/) || [])[1] || t.rep
 
 // ======================= device (Web MIDI + Roland SysEx) =======================
 const HDR = [0xF0, 0x41, 0x10, 0x00, 0x00, 0x00, 0x7D];
-// the instrument's USB MIDI name: AE-20 or AE-30 (Aerophone Pro), however the computer spells it ("AE-30", "Aerophone Pro", "2- AE-20")
+// the instrument's USB MIDI name: Aerophone AE-20 or Aerophone Pro AE-30, however the computer spells it ("AE-30", "Aerophone Pro", "2- AE-20")
 const AE_NAME = /\b(AE[- ]?20|AE[- ]?30|Aerophone[- ]?Pro|GC011)/i;
 const chk = (a) => (128 - (a.reduce((s, x) => s + x, 0) % 128)) & 127;
 const dev = {
@@ -248,7 +248,7 @@ async function readBlock(path) {
   return data;
 }
 
-// ---- live breath: what the AE-20 sends while you play (read only) ----
+// ---- live breath: what the AE-20 / AE-30 sends while you play (read only) ----
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const air = {
   v: 0, peak: 0, peakT: 0, note: null, last: 0, trail: [], raf: null, seen: false,
@@ -393,7 +393,7 @@ function heartbeat() {
   beatT = setInterval(async () => {
     if (!state.connected || state.loading || state.backup || dev.queue.length || dev.timer) return;
     try { const r = await dev.rq1(block('stp').base, 1, 2500); if (r) misses = 0; }
-    catch (e) { if (++misses >= 2) lostConnection('AE-20 not responding'); }
+    catch (e) { if (++misses >= 2) lostConnection('Aerophone not responding'); }
   }, 4000);
 }
 async function connect(portName) {
@@ -404,7 +404,7 @@ async function connect(portName) {
       dev.access = await navigator.requestMIDIAccess({ sysex: true });
       dev.access.onstatechange = (e) => {
         const p = e.port;
-        if (state.connected) { if ((p === dev.output || p === dev.input) && p.state === 'disconnected') lostConnection('AE-20 unplugged or off'); }
+        if (state.connected) { if ((p === dev.output || p === dev.input) && p.state === 'disconnected') lostConnection('Aerophone unplugged or off'); }
         else if (p.state === 'connected' && AE_NAME.test(dev.normName(p.name))) { clearTimeout(autoT); autoT = setTimeout(() => { if (!state.connected && !connecting) connect(); }, 1500); }
       };
     }
@@ -641,7 +641,7 @@ function zenRecord(n, name) {
     }
   }
   // Matrix and MFX control sources can say SYS-CTRL1-4 (97-100): "the instrument's own controller slot 1-4".
-  // ZENOLOGY fills those slots from its own settings, so write the controller the AE-20 actually uses (OFF, CC01-95, BEND, AFT)
+  // ZENOLOGY fills those slots from its own settings, so write the controller the instrument actually uses (OFF, CC01-95, BEND, AFT)
   const sysSrc = (k) => {
     const sc = mem['System%Sys_common'], byScene = sc && raw('System%Sys_common', 69) === 1;
     if (byScene && mem[SP('common')]) return raw(SP('common'), 28 + k);
@@ -663,7 +663,7 @@ function zenRecord(n, name) {
 async function saveToneForZenology(n) {
   if (!window.ZEN || !window.CompressionStream) { toast('This browser can’t write ZENOLOGY files'); return; }
   for (const p of toneBlocks(n)) if (!mem[p]) await readBlock(p);
-  await readBlock('System%Sys_common');            // which controllers SYS-CTRL1-4 stand for on this AE-20
+  await readBlock('System%Sys_common');            // which controllers SYS-CTRL1-4 stand for on this instrument
   const Z = window.ZEN, name = (state.toneNameDraft[n] ?? currentToneName(n)).trim() || 'Tone';
   const rec = zenRecord(n, name), blank = new Uint8Array(Z.recSize); for (const [i, b] of Z.blank) blank[i] = b;
   const raw = new Uint8Array(0x20 + Z.recSize * Z.count); raw.set(Z.svd, 0);
@@ -745,8 +745,8 @@ function toneBarHTML(n) {
     <button class="tnew" id="tnew" title="Start a new tone in an empty user tone slot">${ICON.plus}New tone</button>
     <span class="tstate">${dirty ? `<span class="drafttxt">${ICON.draft}Draft</span>` : userToneIdx(n) >= 0 ? 'Your tone' : 'Preset tone'}</span>
     <input id="tname" maxlength="${TONE_NAME_LEN}" value="${esc(state.toneNameDraft[n] ?? currentToneName(n))}" title="Tone name" aria-label="Tone name">
-    <select class="slot" id="tslot" title="User tone slot on the AE-20">${userToneOptions(idx)}</select>
-    <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the AE-20${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}<span class="iblbl">Tone</span></button>
+    <select class="slot" id="tslot" title="User tone slot on the Aerophone">${userToneOptions(idx)}</select>
+    <button class="ib hold ${dirty ? 'want' : ''}" id="tsave" title="Hold to save this tone to the Aerophone${over ? ', replacing ' + esc(state.userTones[idx]) : ''}">${RING}${ICON.upload}<span class="iblbl">Tone</span></button>
     <button class="ib" id="tzen" title="Save this tone to this computer as a ZENOLOGY bank file">${ICON.computer}</button>
   </div>`;
 }
@@ -921,7 +921,7 @@ function fxNum(list, id) {           // the number an effect type's settings are
   const t = FX_LISTS[list].find((x) => x.id === id); if (!t || !id) return t ? '0' : null;
   return t.text.split(' ')[0];
 }
-// the long effect list, grouped the way players look for things; names as on the AE-20's screen
+// the long effect list, grouped the way players look for things; names as on the instrument's screen
 const FX_GROUPS = [
   ['Drive and amp', ['Overdrive', 'Distortion', 'T-Scream', 'Fuzz', 'Guitar Amp Simulator', 'Speaker Simulator']],
   ['Modulation', ['Chorus', 'Hexa-Chorus', 'Space-D', 'Flanger', 'Step Flanger', 'Phaser 1', 'Tremolo', 'Auto Pan', 'VK Rotary']],
@@ -1019,9 +1019,9 @@ function renderConnect(err) {
   }
   const blocked = err && (err.name === 'SecurityError' || err.name === 'NotAllowedError');
   $('#main').innerHTML = `<div class="connect"><div class="ccard">
-    <h2>${state.lost ? 'The AE-20 isn’t answering' : 'Connect your Aerophone'}</h2>
+    <h2>${state.lost ? 'Your Aerophone isn’t answering' : 'Connect your Aerophone'}</h2>
     <p>${state.lost && !blocked ? 'It was turned off or unplugged. Turn it on or plug it back in and it reconnects by itself, or click Connect. Your unsaved edits are still here.' : blocked ? 'MIDI access was blocked. Allow MIDI devices for this page in the browser’s site settings, then try again.'
-      : dev.access && !found ? 'No AE-20 or AE-30 found. Turn it on and plug it in with a USB cable. If it still doesn’t appear, install Roland’s USB driver for your Aerophone.' : dev.access ? 'Your AE-20 is plugged in.' : 'Plug the AE-20 in with a USB cable and turn it on.'}</p>
+      : dev.access && !found ? 'No AE-20 or AE-30 found. Turn it on and plug it in with a USB cable. If it still doesn’t appear, install Roland’s USB driver for your Aerophone.' : dev.access ? 'Your Aerophone is plugged in.' : 'Plug your Aerophone in with a USB cable and turn it on.'}</p>
     ${opts}
     <button class="btn primary" id="go">Connect</button></div></div>`;
   $('#go').onclick = () => { const ps = $('#portsel'); connect(ps && (ps.type === 'hidden' || ps.closest('details[open]') || ps.tagName === 'SELECT' && !ps.closest('details')) ? ps.value : undefined); };
@@ -1087,8 +1087,8 @@ function titleHTML() {
   </div>
   <div class="acts">
     <button class="ib ${dirty ? 'want' : ''}" id="save" title="Save to Library">${ICON.library}<span class="iblbl">Library</span></button>
-    <button class="ib hold ${dirty ? 'want' : ''}" id="upload" title="Hold to upload this scene to the AE-20">${RING}${ICON.upload}<span class="iblbl">Scene</span></button>
-    <select class="slot" id="wslot" title="User slot on the AE-20">${slotOptions(uploadTarget())}</select><span class="sep"></span>
+    <button class="ib hold ${dirty ? 'want' : ''}" id="upload" title="Hold to upload this scene to the Aerophone">${RING}${ICON.upload}<span class="iblbl">Scene</span></button>
+    <select class="slot" id="wslot" title="User slot on the Aerophone">${slotOptions(uploadTarget())}</select><span class="sep"></span>
     <button class="ib" id="revert" title="Revert to saved" ${dirty ? '' : 'disabled'}>${ICON.revert}</button>
   </div>`;
 }
@@ -1218,7 +1218,7 @@ function assignSummary(blk, slots) {
   }
   return out;
 }
-// the AE-20's 12 breath/controller curves
+// the 12 breath/controller curves (AE-20 and AE-30)
 const CURVE_K = [1.7, 2.6, 4, 8];
 function curveFn(c, x) {
   if (c >= 1 && c <= 4) return Math.pow(x, CURVE_K[c - 1]);
@@ -1793,7 +1793,7 @@ function guard(action) {
   const t = uploadTarget();
   v.innerHTML = `<div class="panel" role="dialog" aria-modal="true"><h2>Keep your edits to ${esc(sceneName())}?</h2><p>You changed this scene. Choose what to do before moving on.</p>
     <button class="choice primary" data-c="save">${ICON.library}<div><b>Save to Library</b><span>${state.entry ? 'Updates it in ' + esc((state.libs.find((l) => l.id === state.entry.lib) || {}).name || 'the Library') : 'Adds it to My scenes on this computer'}</span></div></button>
-    <button class="choice" data-c="upload"><div class="fill"></div>${ICON.upload}<div><b>Hold to upload to the AE-20</b><span>Overwrites user slot U${pad2(t.lsb + 1)}-${pad2(t.pc + 1)}</span></div></button>
+    <button class="choice" data-c="upload"><div class="fill"></div>${ICON.upload}<div><b>Hold to upload to the Aerophone</b><span>Overwrites user slot U${pad2(t.lsb + 1)}-${pad2(t.pc + 1)}</span></div></button>
     <button class="choice" data-c="discard">${ICON.discard}<div><b>Discard edits</b><span>Go back to the saved sound</span></div></button>
     <button class="stay">Keep editing</button></div>`;
   document.body.appendChild(v);
@@ -1807,7 +1807,7 @@ function guard(action) {
 }
 addEventListener('beforeunload', (e) => { if (isDirty() || tonesDirty().length) { e.preventDefault(); e.returnValue = ''; } });
 
-// ---- Library view: this computer (left) → the AE-20 (right) ----
+// ---- Library view: this computer (left) → the Aerophone (right) ----
 // Scenes on the left live only in this browser. Nothing reaches the instrument until it is
 // lined up on a user slot on the right and uploaded with a hold.
 const COMPUTER = '<svg class="g" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="10.5" rx="1.5"/><path d="M2.5 19h19"/></svg>';
@@ -1850,9 +1850,9 @@ function renderLibrary() {
     const tones = psTones(sc.ps);
     return `<div class="card ${picked.has(sc.id) ? 'picked' : ''} ${queued.has(sc.id) ? 'queued' : ''}" draggable="true" data-sc="${sc.id}" tabindex="0">
       <div class="cn"><b>${esc(sc.name || psName(sc.ps))}</b><span>${esc(tones.map((t) => t.name).join(' + ') || 'No parts on')}</span>
-        ${tones.some((t) => t.user) ? '<em class="warn">Uses a user tone, which must already be on the AE-20</em>' : ''}</div>
+        ${tones.some((t) => t.user) ? '<em class="warn">Uses a user tone, which must already be on the Aerophone</em>' : ''}</div>
       <span class="ct">${lib.backup && sc.from ? esc(sc.from) : sc.savedAt ? fmt(sc.savedAt) : ''}</span>
-      <button class="ib sm" data-act="play" title="Try it on the AE-20 without saving to a slot">${ICON.play}</button>
+      <button class="ib sm" data-act="play" title="Try it on the Aerophone without saving to a slot">${ICON.play}</button>
       <button class="ib sm hold danger" data-act="del" title="Hold to delete from this computer">${RING}${ICON.trash}</button>
     </div>`; }).join('') : '';
 
@@ -1869,17 +1869,17 @@ function renderLibrary() {
 
   $('#main').innerHTML = `<div class="lib">
     <section class="pane local" id="localpane">
-      <header><div class="ph">${COMPUTER}<div><h2>This computer</h2><p>Kept in this browser. Upload a scene to play it from the AE-20.</p></div></div>
+      <header><div class="ph">${COMPUTER}<div><h2>This computer</h2><p>Kept in this browser. Upload a scene to play it from the Aerophone.</p></div></div>
         <div class="pa"><button class="ib sm" id="libnew" title="New library">${ICON.plus}</button><button class="ib sm" id="libimport" title="Import .aezl files">${ICON.open}</button></div></header>
       <div class="shelves">${shelf}</div>
       ${lib ? `<div class="libbar"><h3 id="libname" title="Rename">${esc(lib.name)}</h3><span>${lib.kind === 'drafts' ? 'Kept automatically when you leave a scene with unsaved edits' : `${lib.scenes.length} scene${lib.scenes.length === 1 ? '' : 's'}`}</span>
         ${lib.scenes.length > 1 ? `<button class="selall" id="selall">${state.picks.length === lib.scenes.length ? 'Select none' : 'Select all'}</button>` : ''}
         <button class="ib sm" id="libexport" title="Export as .aezl">${ICON.download}</button><button class="ib sm hold danger" id="libdel" title="Hold to delete this library">${RING}${ICON.trash}</button></div>` : ''}
-      <div class="cards">${cards || `<p class="empty">${lib ? 'Nothing here yet. Save a scene with the disk icon in Scenes, or drag a slot over from the AE-20.' : 'Import a .aezl file, or save a scene with the disk icon in Scenes.'}</p>`}</div>
+      <div class="cards">${cards || `<p class="empty">${lib ? 'Nothing here yet. Save a scene with the disk icon in Scenes, or drag a slot over from the Aerophone.' : 'Import a .aezl file, or save a scene with the disk icon in Scenes.'}</p>`}</div>
     </section>
     <div class="gutter">${ARROW}</div>
     <section class="pane device" id="devpane">
-      <header><div class="ph"><i class="led ${state.connected ? 'ok' : ''}"></i><div><h2>AE-20</h2><p>${state.connected ? 'User scenes. Drag a scene onto a slot, then hold to upload.' : 'Connect the AE-20 to upload.'}</p></div></div>
+      <header><div class="ph"><i class="led ${state.connected ? 'ok' : ''}"></i><div><h2>Aerophone</h2><p>${state.connected ? 'User scenes. Drag a scene onto a slot, then hold to upload.' : 'Connect your Aerophone to upload.'}</p></div></div>
         ${state.connected ? `<button class="btn ghost" id="backup" ${state.backup ? 'disabled' : ''}>${ICON.download}Back up</button>` : ''}</header>
       <div class="banks">${banks}</div>
       <div class="slots">${slots}</div>
@@ -1930,7 +1930,7 @@ function renderLibrary() {
     pill.ondragstart = (e) => { const l = state.libs.find((x) => x.id === pill.dataset.lib); dragScenes(e, l.scenes.map((x) => ({ lib: l.id, scene: x.id }))); };
     pill.ondragend = () => document.body.classList.remove('dragging-scene', 'dragging-slot');
   }
-  // the left pane accepts slots dragged back from the AE-20 (a copy; the slot is untouched)
+  // the left pane accepts slots dragged back from the Aerophone (a copy; the slot is untouched)
   const lp = $('#localpane');
   lp.ondragover = (e) => { if (e.dataTransfer.types.includes('text/x-ae-slot')) { e.preventDefault(); lp.classList.add('over'); } };
   lp.ondragleave = (e) => { if (!lp.contains(e.relatedTarget)) lp.classList.remove('over'); };
@@ -1972,7 +1972,7 @@ function dragScenes(e, refs) {
   }
   document.body.classList.add('dragging-scene');
 }
-// The AE-20's own empty scene, read from one of its empty slots (it can differ between firmware versions)
+// The instrument's own empty scene, read from one of its empty slots (it can differ between firmware versions)
 async function readSlot(lsb, pc) {
   dev.dt1(block('stp').base, [85, lsb, pc]);                 // select only; nothing is written
   await drained(); await sleep(150);
@@ -1984,7 +1984,7 @@ async function fetchInitScene(avoid) {
   if (state.initScene) return state.initScene;
   const empties = state.userSlots.filter((u) => u.name === 'INIT SCENE' && !avoid.has(`${u.lsb}-${u.pc}`));
   if (!empties.length) return null;
-  state.quiet = true; status('busy', 'Reading the AE-20’s empty scene');
+  state.quiet = true; status('busy', 'Reading the empty scene from the Aerophone');
   try {
     const reads = [];
     for (const u of empties.slice(0, 3)) {
@@ -2004,7 +2004,7 @@ async function uploadStaged() {
   const clears = [...state.staged.entries()].filter(([, r]) => r.clear);
   if (clears.length && !(await fetchInitScene(new Set(clears.map(([k]) => k))))) {
     for (const [k] of clears) state.staged.delete(k);
-    toast(state.userSlots.some((u) => u.name === 'INIT SCENE') ? 'Couldn’t read a matching empty scene from the AE-20, so no slots were emptied' : 'The AE-20 has no empty slot to copy its INIT SCENE from, so no slots were emptied');
+    toast(state.userSlots.some((u) => u.name === 'INIT SCENE') ? 'Couldn’t read a matching empty scene from the Aerophone, so no slots were emptied' : 'The Aerophone has no empty slot to copy its INIT SCENE from, so no slots were emptied');
     if (state.view === 'library') renderLibrary();
     if (!state.staged.size) return;
   }
@@ -2023,7 +2023,7 @@ async function uploadStaged() {
     if (state.view === 'library') renderLibrary();
   }
   status('ok', `${dev.name} connected by USB`);
-  toast(done === 1 ? `Uploaded ${findScene(jobs[0][1]).name} to ${sceneNo({ lsb: +jobs[0][0].split('-')[0], pc: +jobs[0][0].split('-')[1] })}` : `Uploaded ${done} scenes to the AE-20`);
+  toast(done === 1 ? `Uploaded ${findScene(jobs[0][1]).name} to ${sceneNo({ lsb: +jobs[0][0].split('-')[0], pc: +jobs[0][0].split('-')[1] })}` : `Uploaded ${done} scenes to the Aerophone`);
 }
 function copyFromSlot(lsb, pc) {
   if (isEmptyName(slotName(lsb, pc))) return;
@@ -2038,7 +2038,7 @@ function copyFromSlot(lsb, pc) {
     toast(`Copied ${sc.name} to ${lib.name}`); renderLibrary();
   });
 }
-// ---- Back up the AE-20: reads every user scene and the 12 favorites; never writes anything to be stored ----
+// ---- Back up the Aerophone: reads every user scene and the 12 favorites; never writes anything to be stored ----
 async function readBlockRaw(path) {
   const b = block(path), data = new Uint8Array(b.len);
   for (let off = 0; off < b.len; off += 128) { const n = Math.min(128, b.len - off); data.set((await dev.rq1(b.base + off, n)).slice(0, n), off); }
@@ -2049,7 +2049,7 @@ function backupAE() {
   guard(async () => {
     const slots = state.userSlots.filter((u) => u.name && u.name !== 'INIT SCENE').sort((a, b) => a.lsb - b.lsb || a.pc - b.pc);
     const before = state.cur && { ...state.cur }, when = new Date();
-    const lib = { id: uid(), name: `AE-20 backup ${when.toLocaleDateString([], { month: 'short', day: 'numeric' })} ${when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`, kind: 'library', backup: true, scenes: [], tones: [], created: Date.now(), favorites: [] };
+    const lib = { id: uid(), name: `Aerophone backup ${when.toLocaleDateString([], { month: 'short', day: 'numeric' })} ${when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`, kind: 'library', backup: true, scenes: [], tones: [], created: Date.now(), favorites: [] };
     state.backup = { done: 0, total: slots.length, stop: false, now: '' };
     const show = () => { status('busy', `Backing up ${Math.min(state.backup.total, state.backup.done + 1)} of ${state.backup.total}`); if (state.view === 'library') renderLibrary(); };
     show();
@@ -2070,7 +2070,7 @@ function backupAE() {
     state.backup = null;
     if (lib.scenes.length) { if (stopped) lib.name += ' (partial)'; state.libs.push(lib); await LIB.put(lib); state.libSel = lib.id; LS.set('libSel', lib.id); }
     if (state.connected && before) { dev.dt1(block('stp').base, [before.msb, before.lsb, before.pc]); state.cur = before; state.skipDraft = true; await drained(); await sleep(150); await loadScene(); }
-    status(state.connected ? 'ok' : 'lost', state.connected ? `${dev.name} connected by USB` : 'AE-20 unplugged or off. Click to reconnect');
+    status(state.connected ? 'ok' : 'lost', state.connected ? `${dev.name} connected by USB` : 'Aerophone unplugged or off. Click to reconnect');
     toast(lib.scenes.length ? `Backed up ${lib.scenes.length} scene${lib.scenes.length === 1 ? '' : 's'} and your favorites${stopped ? ', then stopped' : ''}` : 'Nothing was backed up');
     if (state.view === 'library') renderLibrary();
   });
@@ -2401,8 +2401,8 @@ function startFavSave(viaOverlay) {
   if (!(isDirty() || state.unstored)) return go();
   const t = uploadTarget();
   const v = document.createElement('div'); v.className = 'panelveil';
-  v.innerHTML = `<div class="panel" role="dialog" aria-modal="true"><h2>Upload ${esc(sceneName())} first?</h2><p>A favorite plays whatever is stored in its slot on the AE-20. Your changes to this scene aren’t stored there yet.</p>
-    <button class="choice primary" data-c="upload"><div class="fill"></div>${ICON.upload}<div><b>Hold to upload to the AE-20</b><span>Overwrites user slot U${pad2(t.lsb + 1)}-${pad2(t.pc + 1)}, then pick a favorite slot</span></div></button>
+  v.innerHTML = `<div class="panel" role="dialog" aria-modal="true"><h2>Upload ${esc(sceneName())} first?</h2><p>A favorite plays whatever is stored in its slot on the Aerophone. Your changes to this scene aren’t stored there yet.</p>
+    <button class="choice primary" data-c="upload"><div class="fill"></div>${ICON.upload}<div><b>Hold to upload to the Aerophone</b><span>Overwrites user slot U${pad2(t.lsb + 1)}-${pad2(t.pc + 1)}, then pick a favorite slot</span></div></button>
     <button class="choice" data-c="saved">${ICON.heart}<div><b>Use the stored version</b><span>The favorite plays the scene as it was before your changes</span></div></button>
     <button class="stay">Keep editing</button></div>`;
   document.body.appendChild(v);

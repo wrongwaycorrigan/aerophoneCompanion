@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="docs/images/aerophone-companion-cover-clean-ui.jpg" alt="Aerophone Companion: enhanced expression for the AE-20" width="100%">
+  <img src="docs/images/aerophone-companion-cover-clean-ui.jpg" alt="Aerophone Companion: enhanced expression for the Roland Aerophone AE-20 and Aerophone Pro AE-30" width="100%">
 </p>
 
 <h1 align="center">Aerophone Companion</h1>
 
 <p align="center">
-  <b>Enhanced expression for the Roland AE-20.</b><br>
+  <b>Enhanced expression for the Roland Aerophone AE-20 and Aerophone Pro AE-30.</b><br>
   A free, browser-based companion for exploring, shaping and organising your sounds.
 </p>
 
 <p align="center">
   <a href="LICENSE.txt"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-B07D2B"></a>
   <img alt="Version 0.14.0" src="https://img.shields.io/badge/version-0.14.0-3F877D">
-  <img alt="For the Roland AE-20" src="https://img.shields.io/badge/for-Roland%20AE--20-222">
+  <img alt="For the Roland Aerophone AE-20 and Aerophone Pro AE-30" src="https://img.shields.io/badge/for-Roland%20AE--20%20%7C%20AE--30-222">
   <img alt="Runs in Chrome or Edge" src="https://img.shields.io/badge/runs%20in-Chrome%20%7C%20Edge-4285F4?logo=googlechrome&logoColor=white">
   <img alt="Web MIDI over USB" src="https://img.shields.io/badge/Web%20MIDI-USB%20SysEx-62B5A8">
   <img alt="Windows and macOS" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey">
@@ -28,7 +28,7 @@
 
 ---
 
-Aerophone Companion unlocks the potential of the Roland AE-20 Digital Wind Instrument with an intuitive, browser-based app. It talks to your instrument over USB using SysEx, the messages the AE-20 already understands.
+Aerophone Companion unlocks the potential of the Roland Aerophone AE-20 and Roland Aerophone Pro AE-30 digital wind instruments with an intuitive, browser-based app. It talks to your instrument over USB using SysEx, the messages the AE-20 and AE-30 already understand.
 
 It's made for the composing side of things: at the computer, trying sounds against a track and moving quickly from idea to idea.
 
@@ -56,17 +56,17 @@ It's made for the composing side of things: at the computer, trying sounds again
 </table>
 
 ### Tones
-Go further and explore the tones that create a scene. It's the deepest layer of the AE-20, made easy to explore: oscillators, filters and amps are revealed visually, and every partial shows the name of the wave it plays. Browse and search all 1,980 built-in waves, add or remove partials, **solo** one to hear it on its own, or start a **New tone** from scratch. Save an edited tone to one of the 512 user tone slots, or save it to your computer as a **ZENOLOGY** bank file to keep shaping it in Roland's plug-in.
+Go further and explore the tones that create a scene. It's the deepest layer of your Aerophone, made easy to explore: oscillators, filters and amps are revealed visually, and every partial shows the name of the wave it plays. Browse and search all 1,980 built-in waves, add or remove partials, **solo** one to hear it on its own, or start a **New tone** from scratch. Save an edited tone to one of the 512 user tone slots, or save it to your computer as a **ZENOLOGY** bank file to keep shaping it in Roland's plug-in.
 
 ### Library
-Your AE-20's sound vault. Import, export, organise and back up every scene, then send whole collections to the instrument in one go. Backup only reads from the AE-20, so nothing gets overwritten until you choose.
+Your Aerophone's sound vault. Import, export, organise and back up every scene, then send whole collections to the instrument in one go. Backup only reads from the instrument, so nothing gets overwritten until you choose.
 
 ## Getting started
 
-You need a Roland AE-20, a USB-C **data** cable, and Chrome or Edge on Windows or macOS.
+You need a Roland Aerophone AE-20 or Aerophone Pro AE-30, a USB-C **data** cable, and Chrome or Edge on Windows or macOS.
 
-1. If your computer doesn't list the AE-20 as a MIDI device, install the Aerophone USB driver (roland.com › Support › Aerophone AE-20 › Updates & Drivers).
-2. Connect the AE-20 and turn it on. Close Roland's phone app (or turn Bluetooth off on the AE-20) so the two don't compete.
+1. If your computer doesn't list your Aerophone as a MIDI device, install the USB driver for your model (roland.com › Support › Aerophone AE-20 or Aerophone Pro AE-30 › Updates & Drivers).
+2. Connect your AE-20 or AE-30 and turn it on. Close Roland's phone app (or turn Bluetooth off on the instrument) so the two don't compete.
 
 ### Run it
 
@@ -92,7 +92,7 @@ Then start the app in that folder:
 The app opens at [http://localhost:8642](http://localhost:8642) in Chrome or Edge (on Linux, open it yourself). Keep the server window open while you play. When the browser asks to *control and reprogram your MIDI devices*, click **Allow**.
 
 > [!TIP]
-> **Back up first.** In Library, click **Back up** on the AE-20 side. It reads every user scene and your 12 favorites into a dated library on your computer and changes nothing on the instrument. User tones aren't included in the backup.
+> **Back up first.** In Library, click **Back up** on the instrument side. It reads every user scene and your 12 favorites into a dated library on your computer and changes nothing on the instrument. User tones aren't included in the backup.
 
 <details>
 <summary><b>Troubleshooting</b></summary>
@@ -102,7 +102,7 @@ The app opens at [http://localhost:8642](http://localhost:8642) in Chrome or Edg
 - **Firefox or Safari:** they can't talk to MIDI devices this way. Use Chrome or Edge.
 - **Instrument unplugged or switched off:** the status light at the top right shows it. Click the light to reconnect.
 - **Where your Library lives:** in the browser at `http://localhost:8642`. Export anything you want to keep as files.
-- **Reporting a problem:** include the version and build code shown next to the app's name (for example `v0.14.0 · 5d1212b`).
+- **Reporting a problem:** say whether you use an AE-20 or an AE-30, and include the version and build code shown next to the app's name (for example `v0.14.0 · 5d1212b`).
 
 </details>
 
@@ -111,7 +111,7 @@ The app opens at [http://localhost:8642](http://localhost:8642) in Chrome or Edg
 
 | Folder | What it is |
 | --- | --- |
-| `app/` | The app itself. `app/data.js` holds facts about the AE-20 (parameter addresses, ranges, effect types and settings, tone names), built from Roland's public documents for the AE-30/AE-20: the MIDI Implementation, the Parameter Guide and the Scene List. Scene and user tone names are read from your instrument. |
+| `app/` | The app itself. `app/data.js` holds facts about the AE-20 and AE-30 (parameter addresses, ranges, effect types and settings, tone names), built from Roland's public documents for the AE-30/AE-20: the MIDI Implementation, the Parameter Guide and the Scene List. Scene and user tone names are read from your instrument. |
 | `tools/` | Rebuilds `app/data.js` from newer editions of those documents. Needs Python 3, `pdftotext` and the `pdfplumber` package. |
 | `docs/images/` | Images for this page. |
 

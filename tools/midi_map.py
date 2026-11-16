@@ -1,4 +1,4 @@
-"""Parse the Parameter Address Map from Roland's public AE-30/AE-20 MIDI Implementation
+"""Parse the Parameter Address Map from Roland's public AE-30/AE-20 (Aerophone Pro / Aerophone) MIDI Implementation
 (pdftotext -layout output) into plain tables:
   maps:   {table: [(offset7, desc, subtable)]}   (nested address maps, ':' rows expanded)
   leaves: {table: [{off, rows, bits, name, raw:(lo,hi)|None, disp:[text lines]}]}

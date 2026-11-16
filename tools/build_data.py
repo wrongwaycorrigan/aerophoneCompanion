@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build app/data.js from Roland's public AE-30/AE-20 documents.
+"""Build app/data.js from Roland's public AE-30/AE-20 (Aerophone Pro / Aerophone) documents.
+
+The resulting data covers both instruments. Parts that only exist on the AE-30 are left out.
 
 usage: python3 build_data.py <MIDI Implementation.pdf> <Parameter Guide.pdf> <Scene List.pdf> <out data.js>
 Needs pdftotext (poppler) and pdfplumber.

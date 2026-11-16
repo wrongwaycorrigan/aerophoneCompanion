@@ -5,12 +5,13 @@
   /_/  |_/_____/_/ |_|\____/_/   /_/ /_/\____/_/ |_/_____/
                                   C  O  M  P  A  N  I  O  N
 
-              Enhanced expression for the Roland AE-20
+        Enhanced expression for the Roland Aerophone AE-20 and AE-30
 ==============================================================================
 
-Aerophone Companion unlocks the potential of the Roland AE-20 Digital Wind
-Instrument with an intuitive, browser-based app. It talks to your instrument
-over USB using SysEx, the messages the AE-20 already understands.
+Aerophone Companion unlocks the potential of the Roland Aerophone AE-20 and
+Roland Aerophone Pro AE-30 digital wind instruments with an intuitive,
+browser-based app. It talks to your instrument over USB using SysEx, the
+messages the AE-20 and AE-30 already understand.
 
 It's made for the composing side of things: at the computer, trying sounds
 against a track and moving quickly from idea to idea.
@@ -32,7 +33,7 @@ SCENE EDITOR
 
 TONES
   Go further and explore the tones that create a scene. It's the deepest layer
-  of the AE-20, made easy to explore: oscillators, filters and amps are
+  of your Aerophone, made easy to explore: oscillators, filters and amps are
   revealed visually, and every partial shows the name of the wave it plays.
   Browse and search all 1,980 built-in waves, add or remove partials, solo one
   to hear it on its own, or start a New tone from scratch. Save an edited tone
@@ -40,23 +41,23 @@ TONES
   bank file to keep shaping it in Roland's plug-in.
 
 LIBRARY
-  Your AE-20's sound vault. Import, export, organise and back up every scene,
+  Your Aerophone's sound vault. Import, export, organise and back up every scene,
   then send whole collections to the instrument in one go. Backup only reads
-  from the AE-20, so nothing gets overwritten until you choose.
+  from the instrument, so nothing gets overwritten until you choose.
 
 
 GETTING STARTED
 ---------------
 
-You need a Roland AE-20, a USB-C data cable, and Chrome or Edge on Windows or
-macOS.
+You need a Roland Aerophone AE-20 or Aerophone Pro AE-30, a USB-C data
+cable, and Chrome or Edge on Windows or macOS.
 
-1. If your computer doesn't list the AE-20 as a MIDI device, install the
-   Aerophone USB driver (roland.com > Support > Aerophone AE-20 > Updates &
-   Drivers).
+1. If your computer doesn't list your Aerophone as a MIDI device, install the
+   USB driver for your model (roland.com > Support > Aerophone AE-20 or
+   Aerophone Pro AE-30 > Updates & Drivers).
 
-2. Connect the AE-20 and turn it on. Close Roland's phone app (or turn
-   Bluetooth off on the AE-20) so the two don't compete.
+2. Connect your AE-20 or AE-30 and turn it on. Close Roland's phone app (or
+   turn Bluetooth off on the instrument) so the two don't compete.
 
 
 RUN IT
@@ -91,7 +92,7 @@ to "control and reprogram your MIDI devices", click Allow.
 BACK UP FIRST
 -------------
 
-In Library, click "Back up" on the AE-20 side. It reads every user scene and
+In Library, click "Back up" on the instrument side. It reads every user scene and
 your 12 favorites into a dated library on your computer and changes nothing
 on the instrument. User tones aren't included in the backup.
 
@@ -113,15 +114,15 @@ TROUBLESHOOTING
   shows it. Click the light to reconnect.
 - Where your Library lives: in the browser at http://localhost:8642. Export
   anything you want to keep as files.
-- Reporting a problem: include the version and build code shown next to the
-  app's name (for example v0.14.3 · 7e8f3b8).
+- Reporting a problem: say whether you use an AE-20 or an AE-30, and include
+  the version and build code shown next to the app's name (for example v0.14.3 · 7e8f3b8).
 
 
 WHAT'S INSIDE
 -------------
 
-app/          The app itself. app/data.js holds facts about the AE-20
-              (parameter addresses, ranges, effect types and settings, tone
+app/          The app itself. app/data.js holds facts about the AE-20 and
+              AE-30 (parameter addresses, ranges, effect types and settings, tone
               names), built from Roland's public documents for the
               AE-30/AE-20: the MIDI Implementation, the Parameter Guide and
               the Scene List. Scene and user tone names are read from your

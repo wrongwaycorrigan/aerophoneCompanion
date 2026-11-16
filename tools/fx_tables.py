@@ -1,5 +1,5 @@
 """Extract effect parameter tables (Parameter / Value / Explanation) from Roland's public
-AE-30/AE-20 Parameter Guide, grouped under their numbered headings ("01  Equalizer")."""
+AE-30/AE-20 (Aerophone Pro / Aerophone) Parameter Guide, grouped under their numbered headings ("01  Equalizer")."""
 import re, sys, json
 import pdfplumber
 

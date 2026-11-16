@@ -1,4 +1,4 @@
-"""Write a ZENOLOGY user bank (SVZ) holding one AE-20 tone, from an Aerophone Companion .tone.json.
+"""Write a ZENOLOGY user bank (SVZ) holding one AE-20 or AE-30 tone, from an Aerophone Companion .tone.json.
 usage: build_bank.py <spec.json> <template bank> <tone.json> <out.bin>"""
 import json, sys, zlib, struct
 sys.path.insert(0, __file__.rsplit('/', 1)[0]); import align as A

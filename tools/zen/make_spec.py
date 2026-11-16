@@ -1,4 +1,4 @@
-"""Build the AE-20 -> ZENOLOGY tone spec from an aligned pair (tone.json from the app + ZENOLOGY bank with
+"""Build the AE-20/AE-30 -> ZENOLOGY tone spec from an aligned pair (tone.json from the app + ZENOLOGY bank with
 the same tone). Writes zen_spec.json: per block, where its first copy starts, the distance between copies,
 and for each setting its byte position, width and whether it is stored signed (centre = 0)."""
 import json, sys, zlib

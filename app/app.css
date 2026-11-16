@@ -115,7 +115,7 @@ svg.ring .p{stroke:var(--brass);stroke-dasharray:151;stroke-dashoffset:151}
 .notice svg{width:18px;height:18px}
 .notice button{color:var(--brass);font-weight:600;margin-left:6px;padding:4px 8px;border-radius:6px}
 
-/* Library: this computer → the AE-20 */
+/* Library: this computer → the Aerophone (AE-20 / AE-30) */
 .lib{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);padding:24px}
 .pane{border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-height:0;overflow:hidden;background:var(--paper)}
 .pane.over{outline:2px dashed var(--brass);outline-offset:3px}

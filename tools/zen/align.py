@@ -1,4 +1,4 @@
-"""Work out where each AE-20 tone setting sits in a ZENOLOGY tone record, by aligning the
+"""Work out where each AE-20/AE-30 tone setting sits in a ZENOLOGY tone record, by aligning the
 same tone read from the instrument (Aerophone Companion's .tone.json) with its ZENOLOGY export.
 Settings appear in the same order in both; ZENOLOGY packs them as little-endian 1/2/4-byte values,
 centred settings stored signed. A local alignment (settings in order, small gaps allowed) finds them."""
