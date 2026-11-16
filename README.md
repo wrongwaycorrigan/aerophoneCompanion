@@ -20,6 +20,7 @@
 </p>
 
 <p align="center">
+  <a href="https://wrongwaycorrigan.github.io/aerophoneCompanion/"><b>Open the app</b></a> ·
   <a href="https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip"><b>Download</b></a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#what-it-does">What it does</a> ·
@@ -68,9 +69,13 @@ You need a Roland Aerophone AE-20 or Aerophone Pro AE-30, a USB-C **data** cable
 1. If your computer doesn't list your Aerophone as a MIDI device, install the USB driver for your model (roland.com › Support › Aerophone AE-20 or Aerophone Pro AE-30 › Updates & Drivers).
 2. Connect your AE-20 or AE-30 and turn it on. Close Roland's phone app (or turn Bluetooth off on the instrument) so the two don't compete.
 
-### Run it
+### Open it online
 
-No install or build step, and no internet connection needed. Windows uses its built-in PowerShell; macOS and Linux need Python 3.
+The quickest way: open **[https://wrongwaycorrigan.github.io/aerophoneCompanion/](https://wrongwaycorrigan.github.io/aerophoneCompanion/)** in Chrome or Edge. Nothing to download or install. When the browser asks to *control and reprogram your MIDI devices*, click **Allow**.
+
+### Or run it on your computer
+
+No install or build step, and no internet connection needed once you have it. Windows uses its built-in PowerShell; macOS and Linux need Python 3.
 
 **Download:** [**⬇ Download ZIP**](https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip), then extract it. This is the easiest way.
 
@@ -100,8 +105,9 @@ The app opens at [http://localhost:8642](http://localhost:8642) in Chrome or Edg
 - **Windows warns about a downloaded file:** right-click the zip › Properties › tick **Unblock**, then extract again.
 - **macOS won't open the start script:** right-click it › **Open**, then **Open** again. If it still refuses, open Terminal, type `xattr -d com.apple.quarantine ` (with a space at the end), drag the script onto the window and press Return. Do the same with `chmod +x `.
 - **Firefox or Safari:** they can't talk to MIDI devices this way. Use Chrome or Edge.
+- **The online version looks out of date:** do a hard refresh (Ctrl+Shift+R, or Cmd+Shift+R on macOS) to load the latest files.
 - **Instrument unplugged or switched off:** the status light at the top right shows it. Click the light to reconnect.
-- **Where your Library lives:** in the browser at `http://localhost:8642`. Export anything you want to keep as files.
+- **Where your Library lives:** in the browser, at the address you opened the app from. The online version (`https://wrongwaycorrigan.github.io/aerophoneCompanion/`) and the local one (`http://localhost:8642`) each keep their own Library, so export anything you want to keep, or move between them, as files.
 - **Reporting a problem:** say whether you use an AE-20 or an AE-30, and include the version and build code shown next to the app's name (for example `v0.14.0 · 5d1212b`).
 
 </details>

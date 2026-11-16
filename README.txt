@@ -60,11 +60,22 @@ cable, and Chrome or Edge on Windows or macOS.
    turn Bluetooth off on the instrument) so the two don't compete.
 
 
-RUN IT
-------
+OPEN IT ONLINE
+--------------
 
-No install or build step, and no internet connection needed. Windows uses its
-built-in PowerShell; macOS and Linux need Python 3.
+The quickest way: open this in Chrome or Edge. Nothing to download or install.
+
+  https://wrongwaycorrigan.github.io/aerophoneCompanion/
+
+When the browser asks to "control and reprogram your MIDI devices", click
+Allow.
+
+
+OR RUN IT ON YOUR COMPUTER
+--------------------------
+
+No install or build step, and no internet connection needed once you have it.
+Windows uses its built-in PowerShell; macOS and Linux need Python 3.
 
 Download the zip and extract it (the easiest way):
   https://github.com/wrongwaycorrigan/aerophoneCompanion/archive/refs/heads/main.zip
@@ -110,10 +121,14 @@ TROUBLESHOOTING
       chmod +x
 - Firefox or Safari: they can't talk to MIDI devices this way. Use Chrome or
   Edge.
+- The online version looks out of date: do a hard refresh (Ctrl+Shift+R, or
+  Cmd+Shift+R on macOS) to load the latest files.
 - Instrument unplugged or switched off: the status light at the top right
   shows it. Click the light to reconnect.
-- Where your Library lives: in the browser at http://localhost:8642. Export
-  anything you want to keep as files.
+- Where your Library lives: in the browser, at the address you opened the app
+  from. The online version and the local one (http://localhost:8642) each keep
+  their own Library, so export anything you want to keep, or move between them,
+  as files.
 - Reporting a problem: say whether you use an AE-20 or an AE-30, and include
   the version and build code shown next to the app's name (for example v0.14.3 · 7e8f3b8).
 
