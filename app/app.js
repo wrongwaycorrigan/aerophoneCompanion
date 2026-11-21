@@ -176,7 +176,7 @@ const dev = {
   normName(n) {
     n = String(n || '').trim();
     const m = n.match(/^MIDI(?:IN|OUT)\d*\s*\((.*)\)$/i); if (m) n = m[1];
-    return n.replace(/^\d+-\s*/, '').replace(/\s+MIDI\s*\d*$/i, '').replace(/:.*$/, '').trim();
+    return n.replace(/^\d+-\s*/, '').replace(/\s+MIDI\s*(?:IN|OUT)?\s*\d*$/i, '').replace(/:.*$/, '').trim();   // macOS class driver: "AE-20 MIDI IN1" / "AE-20 MIDI OUT1"
   },
   ports() {
     const ins = [], outs = [];
@@ -188,7 +188,7 @@ const dev = {
     const { ins, outs } = this.ports();
     const want = name || [...outs.map((p) => this.normName(p.name))].find((n) => AE_NAME.test(n));
     if (!want) return false;
-    const rank = (p) => (p.name.trim() === this.normName(p.name) ? 0 : 1);
+    const rank = (p) => (p.name.trim() === this.normName(p.name) ? 0 : /2$/.test(p.name.trim()) ? 2 : 1);   // prefer port 1 over port 2
     this.input = ins.filter((p) => this.normName(p.name) === want).sort((a, b) => rank(a) - rank(b))[0];
     this.output = outs.filter((p) => this.normName(p.name) === want).sort((a, b) => rank(a) - rank(b))[0];
     if (!this.input || !this.output) return false;
